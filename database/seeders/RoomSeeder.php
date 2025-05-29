@@ -30,7 +30,7 @@ class RoomSeeder extends Seeder
 
         foreach ($rooms as $room) {
             Room::create([
-                'ashram_id' => 4, // 👈 Change as per actual ashram_id
+                'ashram_id' => 1, // 👈 Change as per actual ashram_id
                 'name' => $room['name'],
                 'donation' => $room['donation'],
                 'no_of_beds' => $room['no_of_beds'],
