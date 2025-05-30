@@ -119,11 +119,11 @@
         </tr>
         <tr>
             <th>Adults</th>
-            <td>—</td>
+            <td>{{ $booking->adults }}</td>
         </tr>
         <tr>
             <th>Children</th>
-            <td>—</td>
+            <td>{{ $booking->children }}</td>
         </tr>
         <tr>
             <th>Anna Prasadam Timing</th>

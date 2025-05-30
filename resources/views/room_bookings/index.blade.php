@@ -87,7 +87,7 @@
                                         </ul>
                                     </td>
                                     <td>
-                                        ₹{{ $booking->rooms->sum('amount') }}
+                                        ₹ {{ $booking->rooms->sum('amount') }}
                                     </td>
                                     <td>
                                         @php
@@ -96,10 +96,10 @@
                                                 'booked' => 'bg-info text-dark',
                                                 'completed' => 'bg-success',
                                                 'cancelled' => 'bg-danger',
+                                                'applied' => 'bg-warning text-dark',
                                                 default => 'bg-secondary',
                                             };
                                         @endphp
-
                                         <span class="badge {{ $badgeClass }}">{{ ucfirst($status) }}</span>
                                     </td>
 
@@ -110,7 +110,13 @@
                                                 <i class="bx bx-dots-vertical-rounded"></i>
                                             </button>
                                             <div class="dropdown-menu">
-
+                                                {{-- Mark as Applied --}}
+                                                <button class="dropdown-item status-change"
+                                                    data-url="{{ route('room-bookings.status.update', ['id' => $booking->id, 'status' => 'applied']) }}"
+                                                    data-action="Mark this booking as applied?">
+                                                    <i class="fas fa-hourglass-start me-1 text-warning"></i> Mark as
+                                                    Applied
+                                                </button>
                                                 {{-- Cancel --}}
                                                 <button class="dropdown-item status-change"
                                                     data-url="{{ route('room-bookings.status.update', ['id' => $booking->id, 'status' => 'cancelled']) }}"

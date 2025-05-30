@@ -21,6 +21,14 @@
         </li>
 
 
+
+        <li class="menu-item {{ request()->routeIs('room-calendar') ? 'active' : '' }}">
+            <a href="{{ route('room-calendar') }}" class="menu-link">
+                <i class="menu-icon fas fa-clock"></i>
+                <span class="menu-text">Room Calendar</span>
+            </a>
+        </li>
+
         <li class="menu-item {{ request()->routeIs('room-bookings.*') ? 'active open' : '' }}">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon fas fa-calendar-check"></i>
@@ -33,9 +41,9 @@
                 <li class="menu-item {{ request()->routeIs('room-bookings.index') ? 'active' : '' }}">
                     <a href="{{ route('room-bookings.index') }}" class="menu-link">Booking List</a>
                 </li>
+
             </ul>
         </li>
-
 
 
 

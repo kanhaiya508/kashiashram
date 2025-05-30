@@ -15,4 +15,9 @@ class Ashram extends Model
         'image',
         'active'
     ];
+
+    public function rooms()
+    {
+        return $this->hasMany(Room::class);
+    }
 }

@@ -18,6 +18,8 @@ class Booking extends Model
         'booking_from',
         'booking_to',
         'status',
+        'adults',
+        'children',
     ];
     protected $casts = [
         'booking_from' => 'date',

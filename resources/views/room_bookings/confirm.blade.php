@@ -72,6 +72,30 @@
                                     <option value="Flight">Flight</option>
                                 </select>
                             </div>
+
+
+                            <div class="mb-3">
+                                <label>Number of Adults</label>
+                                <select name="adults" class="form-control" required>
+                                    @for ($i = 1; $i <= 20; $i++)
+                                        <option value="{{ $i }}"
+                                            {{ old('adults') == $i ? 'selected' : '' }}>
+                                            {{ $i }}</option>
+                                    @endfor
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label>Number of Children</label>
+                                <select name="children" class="form-control" required>
+                                    @for ($i = 0; $i <= 10; $i++)
+                                        <option value="{{ $i }}"
+                                            {{ old('children') == $i ? 'selected' : '' }}>
+                                            {{ $i }}</option>
+                                    @endfor
+                                </select>
+                            </div>
+                            
                             <div class="mb-3">
                                 <label>Mail ID</label>
                                 <input type="email" name="email" class="form-control">

@@ -176,6 +176,12 @@ class RoomBookingController extends Controller
                 'travel_type' => $request->travel_type,
                 'booking_from' => $bookingFrom,
                 'booking_to' => $bookingTo,
+
+
+                'adults' => $request->adults,
+                'children' => $request->children,
+
+
                 'status' => 'booked',
             ]);
 
@@ -220,6 +226,5 @@ class RoomBookingController extends Controller
         $pdf = Pdf::loadView('room_bookings.invoice', compact('booking'))->setPaper('a4', 'portrait');
         $fileName = 'Invoice_' . $booking->name . '_' . $booking->id . '.pdf';
         return $pdf->stream($fileName);
-
     }
 }
