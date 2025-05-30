@@ -6,6 +6,21 @@ use Illuminate\Support\Facades\Request;
 
 class DashboardController extends Controller
 {
+
+    /**
+     * Show the application dashboard.
+     */
+    public function index()
+    {
+        $bookings = \App\Models\Booking::count();
+        $ashrams = \App\Models\Ashram::count();
+        $rooms = \App\Models\Room::count();
+        $users = \App\Models\User::count();
+
+        return view('dashboard', compact('bookings', 'ashrams', 'rooms', 'users'));
+    }
+
+
     public function upload(Request $request)    {
         if ($request->hasFile('upload')) {
             //get filename with extension
@@ -28,7 +43,7 @@ class DashboardController extends Controller
             $msg = 'Image successfully uploaded';
             $re = "<script>window.parent.CKEDITOR.tools.callFunction($CKEditorFuncNum, '$url', '$msg')</script>";
 
-            // Render HTML output 
+            // Render HTML output
             @header('Content-type: text/html; charset=utf-8');
             echo $re;
         }
