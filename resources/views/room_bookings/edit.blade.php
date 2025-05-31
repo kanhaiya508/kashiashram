@@ -123,7 +123,7 @@
                                         {{-- Room Image --}}
                                         <img src="{{ asset($room->image) }}" alt="{{ $room->name }}"
                                             class="rounded me-md-3 mb-2 mb-md-0"
-                                            style="width:100%; height:auto; object-fit:cover;">
+                                            style="width: 100%; height: auto; max-width: 100px; object-fit: cover;">
 
                                         {{-- Room Details --}}
                                         <div>
