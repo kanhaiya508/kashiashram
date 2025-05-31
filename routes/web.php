@@ -44,20 +44,28 @@ Route::middleware('auth')->group(function () {
 
     ]);
 
-    // Room Booking Routes
-    Route::get('room-bookings', [RoomBookingController::class, 'index'])->name('room-bookings.index');
-    Route::get('room-bookings/create', [RoomBookingController::class, 'create'])->name('room-bookings.create');
-    Route::post('room-bookings/store', [RoomBookingController::class, 'store'])->name('room-bookings.store');
+    Route::prefix('room-bookings')->name('room-bookings.')->group(function () {
+        Route::get('enquiry', [RoomBookingController::class, 'enquiry'])->name('enquiry');
+        Route::get('', [RoomBookingController::class, 'index'])->name('index');
+        Route::get('create', [RoomBookingController::class, 'create'])->name('create');
+        Route::post('store', [RoomBookingController::class, 'store'])->name('store');
 
-    Route::get('room-bookings/confirm', [RoomBookingController::class, 'confirm'])->name('room-bookings.confirm');
-    Route::get('room-bookings/invoice/{booking}', [RoomBookingController::class, 'generateInvoice'])->name('room-bookings.invoice');
+        Route::get('confirm', [RoomBookingController::class, 'confirm'])->name('confirm');
+        Route::post('confirm', [RoomBookingController::class, 'storeFinal'])->name('confirm.store');
 
-    Route::post('room-bookings/confirm', [RoomBookingController::class, 'storeFinal'])->name('room-bookings.confirm.store');
+        Route::get('invoice/{booking}', [RoomBookingController::class, 'generateInvoice'])->name('invoice');
+        Route::get('available-rooms', [RoomBookingController::class, 'availableRooms'])->name('available');
 
 
-    Route::get('room-bookings/available-rooms', [RoomBookingController::class, 'availableRooms'])->name('room-bookings.available');
+        Route::get('{id}/edit', [RoomBookingController::class, 'edit'])->name('edit');
+        Route::put('{id}', [RoomBookingController::class, 'update'])->name('update');
+        Route::delete('{id}', [RoomBookingController::class, 'destroy'])->name('destroy');
 
-    Route::get('room-bookings/{id}/{status}', [RoomBookingController::class, 'status_update'])->name('room-bookings.status.update');
+        Route::post('room-bookings/{bookingId}/add-room', [RoomBookingController::class, 'addRoomToBooking'])->name('add-room');
+        Route::post('room-bookings/{bookingId}/remove-room', [RoomBookingController::class, 'removeRoomFromBooking'])->name('remove-room');
+
+        Route::get('status-update/{id}/{status}', [RoomBookingController::class, 'status_update'])->name('status.update');
+    });
 
 
     Route::get('/room-calendar', [CalendarController::class, 'roomcalendar'])->name('room-calendar');

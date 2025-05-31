@@ -19,7 +19,7 @@
                         onchange="document.getElementById('dateForm').submit();" required>
                 </div>
                 <div class="col-12 col-md-4">
-                    <a href="{{ route('room-bookings.confirm') }}" class="btn btn-success w-100">
+                    <a href="{{ route('room-bookings.confirm') }}" class="btn btn-primary ">
                         Continue to Booking
                     </a>
                 </div>
@@ -165,6 +165,12 @@
                         '{{ route('room-bookings.add-to-session') }}' :
                         '{{ route('room-bookings.remove-from-session') }}';
 
+                    // Show processing text/icon
+                    const originalHTML = btn.innerHTML;
+                    btn.disabled = true;
+                    btn.innerHTML =
+                        '<span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span> Processing...';
+
                     fetch(route, {
                             method: 'POST',
                             headers: {
@@ -178,27 +184,56 @@
                         .then(response => response.json())
                         .then(data => {
                             if (data.status === 'added') {
-                                // Update button to "Remove"
                                 btn.classList.remove('btn-outline-primary');
                                 btn.classList.add('btn-danger');
                                 btn.innerHTML =
                                     '<i class="fas fa-times-circle me-1"></i> Remove from Cart';
                                 btn.setAttribute('data-action', 'remove');
+
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Added!',
+                                    text: 'Room added to cart.',
+                                    timer: 1500,
+                                    showConfirmButton: false
+                                });
                             } else if (data.status === 'removed') {
-                                // Update button to "Add"
                                 btn.classList.remove('btn-danger');
                                 btn.classList.add('btn-outline-primary');
                                 btn.innerHTML =
                                     '<i class="fas fa-cart-plus me-1"></i> Add to Cart';
                                 btn.setAttribute('data-action', 'add');
-                            }
 
-                            // Optionally: Update summary via separate fetch() or Alpine/Livewire
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Removed!',
+                                    text: 'Room removed from cart.',
+                                    timer: 1500,
+                                    showConfirmButton: false
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: 'Something went wrong. Please try again.'
+                                });
+                                btn.innerHTML = originalHTML;
+                            }
+                        })
+                        .catch(() => {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'Network error. Please try again later.'
+                            });
+                            btn.innerHTML = originalHTML;
+                        })
+                        .finally(() => {
+                            btn.disabled = false;
                         });
                 });
             });
         });
     </script>
-
 
 </x-app-layout>

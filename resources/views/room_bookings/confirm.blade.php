@@ -95,7 +95,7 @@
                                     @endfor
                                 </select>
                             </div>
-                            
+
                             <div class="mb-3">
                                 <label>Mail ID</label>
                                 <input type="email" name="email" class="form-control">
@@ -108,10 +108,24 @@
                                 <label>Aadhar Number</label>
                                 <input type="text" name="aadhar" class="form-control">
                             </div>
+
+                            <div class="mb-3">
+                                <label>Booking Status</label>
+                                <select id="status" name="status" class="form-select" required>
+                                    <option value="">-- Select Status --</option>
+                                    <option value="booked">Booked</option>
+                                    <option value="cancelled">Cancelled</option>
+                                    <option value="completed">Completed</option>
+                                </select>
+                            </div>
+
+
                             <div class="mb-3">
                                 <label>Message</label>
                                 <textarea name="message" rows="3" class="form-control"></textarea>
                             </div>
+
+
 
                             <button class="btn btn-success w-100">Confirm Booking</button>
                         </div>

@@ -14,7 +14,8 @@ class RoomBookingController extends Controller
 {
     public function index(Request $request)
     {
-        $query = \App\Models\Booking::with('rooms.room');
+        $query = \App\Models\Booking::with('rooms.room')
+            ->where('status', '!=', 'applied'); // applied exclude karne ke liye
 
         if ($request->filled('search')) {
             $query->where('name', 'like', '%' . $request->search . '%');
@@ -39,6 +40,28 @@ class RoomBookingController extends Controller
 
 
 
+    public function enquiry(Request $request)
+    {
+        $query = \App\Models\Booking::with('rooms.room')
+            ->where('status', 'applied'); // sirf applied status wale
+
+        if ($request->filled('search')) {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        }
+
+        if ($request->filled('phone')) {
+            $query->where('phone', 'like', '%' . $request->phone . '%');
+        }
+
+        if ($request->filled('from_date') && $request->filled('to_date')) {
+            $query->whereBetween('booking_from', [$request->from_date, $request->to_date]);
+        }
+
+        $bookings = $query->latest()->paginate(10)->withQueryString();
+
+        // Alag view bana sakte ho enquiry ke liye ya same view use karo
+        return view('room_bookings.enquiry', compact('bookings'));
+    }
 
     public function create()
     {
@@ -182,7 +205,7 @@ class RoomBookingController extends Controller
                 'children' => $request->children,
 
 
-                'status' => 'booked',
+                'status' => $request->status,
             ]);
 
             // Step 2: Save all room bookings
@@ -226,5 +249,144 @@ class RoomBookingController extends Controller
         $pdf = Pdf::loadView('room_bookings.invoice', compact('booking'))->setPaper('a4', 'portrait');
         $fileName = 'Invoice_' . $booking->name . '_' . $booking->id . '.pdf';
         return $pdf->stream($fileName);
+    }
+
+
+    // Controller me edit method me add karo
+    public function edit($id)
+    {
+        $booking = Booking::with('rooms.room')->findOrFail($id);
+
+
+        $bookingFrom = $booking->booking_from->toDateString();
+        $bookingTo = $booking->booking_to->toDateString();
+        // Step 1: Get all bookings in the date range that are still active
+        $activeBookingIds = Booking::where('status', 'booked')
+            ->where(function ($q) use ($bookingFrom, $bookingTo) {
+                $q->whereBetween('booking_from', [$bookingFrom, $bookingTo])
+                    ->orWhereBetween('booking_to', [$bookingFrom, $bookingTo])
+                    ->orWhere(function ($q2) use ($bookingFrom, $bookingTo) {
+                        $q2->where('booking_from', '<=', $bookingFrom)
+                            ->where('booking_to', '>=', $bookingTo);
+                    });
+            })
+            ->pluck('id');
+
+        // Step 2: Get all room_ids booked within those bookings
+        $bookedRoomIds = RoomBooking::whereIn('booking_id', $activeBookingIds)
+            ->pluck('room_id')
+            ->toArray();
+
+        // Step 3: Filter out booked rooms
+        $rooms = Room::where('active', 1)
+            ->whereNotIn('id', $bookedRoomIds)
+            ->get();
+
+        return view('room_bookings.edit', compact('booking', 'rooms'));
+    }
+
+
+    public function update(Request $request, $id)
+    {
+        $booking = Booking::findOrFail($id);
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'phone' => 'required|string|max:20',
+            'email' => 'nullable|email',
+            'aadhar' => 'nullable|string',
+            'message' => 'nullable|string',
+            'status' => 'required|string|in:applied,booked,cancelled,completed',
+            'adults' => 'required|integer|min:1',
+            'children' => 'required|integer|min:0',
+            'amounts' => 'required|array',
+        ]);
+
+        DB::beginTransaction();
+
+        try {
+            // Update booking info
+            $booking->update([
+                'name' => $request->name,
+                'phone' => $request->phone,
+                'email' => $request->email,
+                'aadhar' => $request->aadhar,
+                'message' => $request->message,
+                'status' => $request->status,
+                'adults' => $request->adults,
+                'children' => $request->children,
+            ]);
+
+            // Update room booking amounts
+            foreach ($booking->rooms as $roomBooking) {
+                $roomId = $roomBooking->room_id;
+                if (isset($request->amounts[$roomId])) {
+                    $roomBooking->update(['amount' => $request->amounts[$roomId]]);
+                }
+            }
+
+            DB::commit();
+
+            return redirect()->route('room-bookings.index')->with('success', 'Booking updated successfully.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'Failed to update booking: ' . $e->getMessage());
+        }
+    }
+
+    public function addRoomToBooking(Request $request, $bookingId)
+    {
+
+
+
+        $request->validate([
+            'room_id' => 'required|exists:rooms,id',
+        ]);
+
+        $booking = Booking::findOrFail($bookingId);
+
+        // Check if room already added
+        $exists = RoomBooking::where('booking_id', $bookingId)->where('room_id', $request->room_id)->exists();
+        if ($exists) {
+            return redirect()->back()->with('error', 'Room already added.');
+        }
+
+        $room = Room::findOrFail($request->room_id);
+
+        RoomBooking::create([
+            'booking_id' => $bookingId,
+            'room_id' => $request->room_id,
+            'amount' => $request->amount ?? $room->donation, // Adjust if price or donation field
+        ]);
+
+        return redirect()->back()->with('success', 'Room added successfully.');
+    }
+
+
+    public function removeRoomFromBooking(Request $request, $bookingId)
+    {
+        $request->validate([
+            'room_booking_id' => 'required|exists:room_bookings,id',
+        ]);
+
+        $roomBooking = RoomBooking::findOrFail($request->room_booking_id);
+
+        if ($roomBooking->booking_id != $bookingId) {
+            return response()->json(['status' => 'error', 'message' => 'Room does not belong to this booking.']);
+        }
+
+        $roomBooking->delete();
+
+        return response()->json(['status' => 'success', 'message' => 'Room removed successfully.']);
+    }
+
+
+
+    public function destroy($id)
+    {
+        $booking = Booking::findOrFail($id);
+        $booking->delete();
+
+        return redirect()->route('room-bookings.index')->with('success', 'Booking deleted successfully.');
     }
 }

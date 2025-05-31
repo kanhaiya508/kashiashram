@@ -1,7 +1,10 @@
 <x-app-layout>
     <div class="container-xxl flex-grow-1 container-p-y">
+
+
+        
         <h4 class="fw-bold py-3 mb-4">
-            <span class="text-muted fw-light">Dashboard /</span> Room Bookings
+            <span class="text-muted fw-light">Dashboard /</span> Room Bookings Enquiry
         </h4>
 
         <div class="card">
@@ -20,19 +23,6 @@
                             <label class="form-label mb-0 small">Phone</label>
                             <input type="text" name="phone" value="{{ request('phone') }}" class="form-control"
                                 placeholder="Phone">
-                        </div>
-
-                        <div class="col-md-2">
-                            <label class="form-label mb-0 small">Status</label>
-                            <select name="status" class="form-select">
-                                <option value="">All</option>
-                                <option value="booked" {{ request('status') == 'booked' ? 'selected' : '' }}>Booked
-                                </option>
-                                <option value="cancelled" {{ request('status') == 'cancelled' ? 'selected' : '' }}>
-                                    Cancelled</option>
-                                <option value="completed" {{ request('status') == 'completed' ? 'selected' : '' }}>
-                                    Completed</option>
-                            </select>
                         </div>
 
                         <div class="col-md-2">
@@ -110,27 +100,6 @@
                                                 <i class="bx bx-dots-vertical-rounded"></i>
                                             </button>
                                             <div class="dropdown-menu">
-
-                                                {{-- Edit --}}
-                                                <a href="{{ route('room-bookings.edit', $booking->id) }}"
-                                                    class="dropdown-item">
-                                                    <i class="fas fa-edit me-1"></i> Edit
-                                                </a>
-
-                                                {{-- Delete --}}
-                                                <form method="POST"
-                                                    action="{{ route('room-bookings.destroy', $booking->id) }}"
-                                                    class="delete-form">
-                                                    @csrf @method('DELETE')
-                                                    <button type="button" class="dropdown-item delete-button">
-                                                        <i class="bx bx-trash me-1"></i> Delete
-                                                    </button>
-                                                </form>
-
-
-
-
-
                                                 {{-- Mark as Applied --}}
                                                 <button class="dropdown-item status-change"
                                                     data-url="{{ route('room-bookings.status.update', ['id' => $booking->id, 'status' => 'applied']) }}"

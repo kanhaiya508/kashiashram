@@ -38,6 +38,12 @@
                 <li class="menu-item {{ request()->routeIs('room-bookings.available') ? 'active' : '' }}">
                     <a href="{{ route('room-bookings.available') }}" class="menu-link">New Booking</a>
                 </li>
+
+                <li class="menu-item {{ request()->routeIs('room-bookings.enquiry') ? 'active' : '' }}">
+                    <a href="{{ route('room-bookings.enquiry') }}" class="menu-link">Booking Enquiry</a>
+                </li>
+
+
                 <li class="menu-item {{ request()->routeIs('room-bookings.index') ? 'active' : '' }}">
                     <a href="{{ route('room-bookings.index') }}" class="menu-link">Booking List</a>
                 </li>
