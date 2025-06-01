@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Booking;
+use App\Models\Donor;
 use Illuminate\Http\Request;
 use App\Models\Room;
 use App\Models\RoomBooking;
@@ -158,5 +159,31 @@ class IndexController extends Controller
     public function thankyou()
     {
         return view('website.thankyou');
+    }
+
+
+    public function donation()
+    {
+        return view('website.donation');
+    }
+
+    public function storeDonor(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'gothra' => 'nullable|string|max:255',
+            'donor_name' => 'nullable|string|max:255',
+            'occasion' => 'nullable|string|max:255',
+            'donation_amount' => 'required|numeric|min:1',
+            'donation_date' => 'required|date|after_or_equal:today',
+            'contact_details' => 'nullable|string|max:255',
+            'contact_number' => 'nullable|string|max:20',
+            'email' => 'nullable|email|max:255',
+            'note' => 'nullable|string|max:1000',
+        ]);
+
+        Donor::create($validated);
+
+        return redirect()->back()->with('success', 'Donation successfully submitted.');
     }
 }

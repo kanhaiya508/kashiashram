@@ -19,6 +19,8 @@ Route::get('web/room-bookings/confirm', [IndexController::class, 'confirm'])->na
 Route::post('web/room-bookings/confirm', [IndexController::class, 'storeFinal'])->name('web.room-bookings.confirm.store');
 Route::get('/thankyou', [IndexController::class, 'thankyou'])->name('thankyou');
 
+Route::get('web/donation', [IndexController::class, 'donation'])->name('web.donation');
+Route::post('web/donation/store', [IndexController::class, 'storeDonor'])->name('donor.store');
 
 
 Route::post('room-bookings/remove-from-session', [RoomBookingController::class, 'removeFromSession'])->name('room-bookings.remove-from-session');

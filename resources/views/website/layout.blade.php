@@ -166,7 +166,7 @@
             </li>
 
             <li class="menu-item ">
-                <a href="{{route('index')}}#Donation"> Donation </a>
+                <a href="{{route('web.donation')}}"> Donation </a>
             </li>
 
             <li class="menu-item ">
@@ -243,7 +243,7 @@
 
 
                     <li class="menu-item ">
-                        <a href="{{route('index')}}#testimonials">Donation</a>
+                        <a href="{{route('web.donation')}}">Donation</a>
                     </li>
 
 

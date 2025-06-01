@@ -130,7 +130,7 @@
                 <div class="col-lg-4 col-md-6 mt-negative-sm">
                     <a href="travel.php" class="sigma_service style-1 secondary-bg">
                         <div class="sigma_service-thumb">
-                            <i class="custom-primary flaticon-hindu-1"></i>
+                            <i class="text-white flaticon-hindu-1"></i>
                         </div>
                         <div class="sigma_service-body">
                             <h5 class="text-white">Travels</h5>
@@ -143,7 +143,7 @@
                 <div class="col-lg-4 col-md-6 mt-negative-sm">
                     <a href="accomodation.php" class="sigma_service style-1 bg-white">
                         <div class="sigma_service-thumb">
-                            <i class="flaticon-pooja"></i>
+                            <i class=" flaticon-pooja"></i>
                         </div>
                         <div class="sigma_service-body">
                             <h5>Accommodation</h5>
@@ -169,7 +169,7 @@
                 <div class="col-lg-4 col-md-6 mt-negative-sm">
                     <a href="education.php" class="sigma_service style-1 secondary-bg">
                         <div class="sigma_service-thumb">
-                            <i class="custom-primary flaticon-hindu-1"></i>
+                            <i class="text-white flaticon-hindu-1"></i>
                         </div>
                         <div class="sigma_service-body">
                             <h5 class="text-white">Educational</h5>
