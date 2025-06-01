@@ -170,7 +170,7 @@
             </li>
 
             <li class="menu-item ">
-                <a href="#testimonials"> Book Room </a>
+                <a href="{{route('web.room-bookings')}}"> Book Room </a>
             </li>
 
         </ul>
