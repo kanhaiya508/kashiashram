@@ -14,6 +14,7 @@ use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [IndexController::class, 'index'])->name('index');
+Route::get('web/room-bookings', [IndexController::class, 'roombookings'])->name('web.room-bookings');
 Route::get('web/room-bookings/confirm', [IndexController::class, 'confirm'])->name('web.room-bookings.confirm');
 Route::post('web/room-bookings/confirm', [IndexController::class, 'storeFinal'])->name('web.room-bookings.confirm.store');
 Route::get('/thankyou', [IndexController::class, 'thankyou'])->name('thankyou');
@@ -69,6 +70,7 @@ Route::middleware('auth')->group(function () {
 
 
     Route::get('/room-calendar', [CalendarController::class, 'roomcalendar'])->name('room-calendar');
+    Route::get('/donor-calendar', [CalendarController::class, 'donorcalendar'])->name('donor-calendar');
 
 
     // financialyears

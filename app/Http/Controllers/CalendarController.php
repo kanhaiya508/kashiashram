@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Models\Ashram;
+use App\Models\Donor;
 use App\Models\Room;
 
 
@@ -60,5 +61,27 @@ class CalendarController extends Controller
         }
 
         return view('calendar.room', compact('ashrams', 'ashramId', 'startDate', 'endDate'));
+    }
+
+    public function donorcalendar(Request $request)
+    {
+        $defaultStartDate = Carbon::today()->format('Y-m-d');
+        $defaultEndDate = Carbon::tomorrow()->format('Y-m-d');
+
+        $startDate = $request->input('start_date', $defaultStartDate);
+        $endDate = $request->input('end_date', $defaultEndDate);
+
+        $start = Carbon::parse($startDate);
+        $end = Carbon::parse($endDate);
+        $dateRange = [];
+
+        while ($start->lte($end)) {
+            $dateRange[] = $start->format('Y-m-d');
+            $start->addDay();
+        }
+
+        $donors = Donor::whereBetween('donation_date', [$startDate, $endDate])->get();
+
+        return view('calendar.donor-calendar', compact('donors', 'dateRange', 'startDate', 'endDate'));
     }
 }

@@ -1,249 +1,451 @@
 @extends('website.layout')
 @section('content')
-    <div class="container-xxl py-4">
-        <div class="">
-            <!-- Top Line: Heading + Cart -->
-            <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
-                <h4 class="fw-bold mb-0">Available Rooms</h4>
-                <a href="{{ route('web.room-bookings.confirm') }}" class="btn btn-dark">
-                    <i class="fas fa-shopping-cart me-1"></i> Go To Cart
-                </a>
-            </div>
+    <!-- Banner Start -->
+    <div class="sigma_banner banner-3">
 
-            <!-- Date Filter (Search Box Style) -->
-            <form method="GET" id="dateForm">
-                <div class="row g-3 align-items-end bg-light p-3 rounded shadow-sm mb-4">
-                    <div class="col-md-5">
-                        <label class="form-label">Booking From</label>
-                        <input type="date" name="booking_from" class="form-control"
-                            value="{{ request('booking_from', session('booking_from')) }}" min="{{ now()->toDateString() }}"
-                            onchange="document.getElementById('dateForm').submit();" required>
-                    </div>
-                    <div class="col-md-5">
-                        <label class="form-label">Booking To</label>
-                        <input type="date" name="booking_to" class="form-control"
-                            value="{{ request('booking_to', session('booking_to')) }}"
-                            min="{{ request('booking_from', session('booking_from', now()->toDateString())) }}"
-                            onchange="document.getElementById('dateForm').submit();" required>
-                    </div>
-                    <div class="col-md-2 d-grid">
-                        <label class="form-label invisible">Search</label>
-                        <button type="submit" class="btn btn-primary">Search</button>
-                    </div>
-                </div>
-            </form>
-        </div>
+        <div class="sigma_banner-slider">
 
-
-        <div class="row mt-4">
-            {{-- Room Cards --}}
-            <div class="col-md-12">
-                <div class="row">
-                    @forelse ($rooms as $room)
-                        <div class="col-md-3 col-6  mb-4">
-                            <div class="card h-100 text-white shadow-sm border-0"
-                                style="position: relative; overflow: hidden;">
-                                <div class="bg-image"
-                                    style="
-        background-image: url('{{ asset($room->image) }}');
-        background-size: cover;
-        background-position: center;
-        height: 220px;
-        position: relative;">
-
-                                    <div
-                                        style="
-            background: rgba(0, 0, 0, 0.5);
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            padding: 10px;">
-                                        <h5 class="card-title mb-1 text-white">{{ $room->name }}</h5>
-                                        <p class="mb-0"><strong>Type:</strong> {{ $room->room_type }}</p>
-                                        <p class="mb-0"><strong>Beds:</strong> {{ $room->no_of_beds }}</p>
-                                        <p class="mb-0"><strong>Donation:</strong> ₹{{ $room->donation }}</p>
-                                    </div>
-                                </div>
-
-                                <div class="p-3 bg-white text-dark">
-                                    <div class="p-3 bg-white text-dark text-center">
-                                        <button
-                                            class="btn w-100 mt-2 btn-toggle-cart {{ session('selected_rooms') && in_array($room->id, session('selected_rooms')) ? 'btn-danger' : 'btn-outline-primary' }}"
-                                            data-room-id="{{ $room->id }}"
-                                            data-action="{{ session('selected_rooms') && in_array($room->id, session('selected_rooms')) ? 'remove' : 'add' }}">
-                                            <i
-                                                class="{{ session('selected_rooms') && in_array($room->id, session('selected_rooms')) ? 'fas fa-times-circle me-1' : 'fas fa-cart-plus me-1' }}"></i>
-                                            {{ session('selected_rooms') && in_array($room->id, session('selected_rooms')) ? 'Remove from Cart' : 'Add to Cart' }}
-                                        </button>
-
-                                    </div>
-
+            <!-- Banner Item Start -->
+            <div class="light-bg sigma_banner-slider-inner bg-cover bg-center bg-norepeat"
+                style="background-image: url('{{ asset('website/assets/img/banner/3.jpg') }}');">
+                <div class="sigma_banner-text">
+                    <div class="container">
+                        <div class="row align-items-center">
+                            <div class="col-lg-6">
+                                <h1 class="title">Some Important Life Lessons From Gita</h1>
+                                <p class="blockquote mb-0 bg-transparent"> We are a Hindu that belives in Lord Rama and
+                                    Vishnu Deva the
+                                    followers and We are a Hindu that belives in Lord Rama and Vishnu Deva. This is where
+                                    you should start
+                                </p>
+                                <div class="section-button d-flex align-items-center">
+                                    <a href="contact-us.html" class="sigma_btn-custom">Join Today <i
+                                            class="far fa-arrow-right"></i> </a>
+                                    <a href="services.html" class="ms-3 sigma_btn-custom white">View Services <i
+                                            class="far fa-arrow-right"></i> </a>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Banner Item End -->
 
+            <!-- Banner Item Start -->
+            <div class="light-bg sigma_banner-slider-inner bg-cover bg-center bg-norepeat"
+                style="background-image: url('{{ asset('website/assets/img/banner/5.jpg') }}');">
+                <div class="sigma_banner-text">
+                    <div class="container">
+                        <div class="row align-items-center">
+                            <div class="col-lg-6">
+                                <h1 class="title">We are a Hindu that believe in Ram</h1>
+                                <p class="blockquote mb-0 bg-transparent"> We are a Hindu that belives in Lord Rama and
+                                    Vishnu Deva the
+                                    followers and We are a Hindu that belives in Lord Rama and Vishnu Deva. This is where
+                                    you should start
+                                </p>
+                                <div class="section-button d-flex align-items-center">
+                                    <a href="contact-us.html" class="sigma_btn-custom">Join Today <i
+                                            class="far fa-arrow-right"></i> </a>
+                                    <a href="services.html" class="ms-3 sigma_btn-custom white">View Services <i
+                                            class="far fa-arrow-right"></i> </a>
+                                </div>
+                            </div>
                         </div>
-                    @empty
-                        <div class="col-12">
-                            <div class="alert alert-warning text-center">No rooms available for selected dates.</div>
+                    </div>
+                </div>
+            </div>
+            <!-- Banner Item End -->
+
+        </div>
+
+    </div>
+    <!-- Banner End -->
+
+    <!-- About Start -->
+    <section id="about" class="section">
+        <div class="container">
+
+            <div class="row align-items-center">
+                <div class="col-lg-6 mb-lg-30">
+                    <div class="img-group">
+                        <div class="img-group-inner">
+                            <img src="{{ asset('website/assets/img/about-group1/1.jpg') }}" alt="about">
+                            <span></span>
+                            <span></span>
                         </div>
-                    @endforelse
+                        <img src="{{ asset('website/assets/img/about-group1/2.jpg') }}" alt="about">
+                        <img src="{{ asset('website/assets/img/about-group1/3.jpg') }}" alt="about">
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="me-lg-30">
+                        <div class="section-title mb-0 text-start">
+                            <p class="subtitle">B7/131, Bagh Hada, Kedar Ghat - 221001</p>
+                            <h4 class="title">Shree Gayatri Charitable Trust</h4>
+                        </div>
+
+                        <p class="blockquote bg-transparent"> The way you feel in the temple is a pattern for how you want
+                            to feel in your life. let us be guided by divinity of lord kasiviswanath in kasi-mokshapuri.
+                            sri kasi gayatri ashram established by sri abburu hari hara swamy ji of nellore, andhra pradesh
+                            and in due course sri sri sri mahadevi mathaji sri datta peethadhi pathi associated with the
+                            ashram and extending various services like narayana seva- nitya anna-danam to the visiting
+                            pilgrims to kasi gayatri ashram and make arrangements for performing abhishekam to lord kasi
+                            viswanath, kumkuma archana to kasi annapoorna devi besides other temples.
+                            sri kasi gayatri ashram is a known place for pilgrims visiting kasi, prayaga, gaya etc </p>
+                        <a href="about-us.html" class="sigma_btn-custom light">Learn More <i class="far fa-arrow-right"></i>
+                        </a>
+                    </div>
                 </div>
             </div>
 
+        </div>
+    </section>
+    <!-- About End -->
 
-            {{-- Booking Summary --}}
-            {{-- <div class="col-md-4 order-1 order-md-2 mt-4 mt-md-0">
 
-                <div class=" d-none d-md-block">
-                    <div class="card shadow-sm">
-                        <div class="card-body">
-                            <h5 class="mb-3">Booking Summary</h5>
-                            @php
-                                $selectedIds = session('selected_rooms', []);
-                                $selectedRooms = \App\Models\Room::whereIn('id', $selectedIds)->get();
-                                $totalAmount = $selectedRooms->sum('donation');
-                            @endphp
+    <div id="service" class="section section-padding pattern-squares dark-bg-2">
+        <div class="container">
 
-                            @forelse ($selectedRooms as $r)
-                                <div class="d-flex justify-content-between">
-                                    <span>{{ $r->name }}</span>
-                                    <span>₹{{ $r->donation }}</span>
-                                </div>
-                            @empty
-                                <p class="text-muted">No rooms selected</p>
-                            @endforelse
+            <div class="section-title text-start">
+                <p class="subtitle">Service</p>
+                <h4 class="title text-white">How We Can Help</h4>
+            </div>
 
-                            @if ($selectedRooms->count())
-                                <hr>
-                                <div class="d-flex justify-content-between fw-bold">
-                                    <span>Total</span>
-                                    <span>₹{{ $totalAmount }}</span>
-                                </div>
+            <div class="row">
 
-                                <div class="mt-3 text-end">
-                                    <a href="{{ route('room-bookings.create') }}" class="btn btn-success w-100">
-                                        Continue to Booking
-                                    </a>
-                                </div>
-                            @endif
+                <div class="col-lg-4 col-md-6">
+                    <a href="shraddha-karma.php" class="sigma_service style-1 primary-bg">
+                        <div class="sigma_service-thumb">
+                            <i class="text-white flaticon-temple"></i>
                         </div>
-                    </div>
+                        <div class="sigma_service-body">
+                            <h5 class="text-white">Shraddha Karma</h5>
+                            <p class="text-white">Perform last rites and rituals with full devotion and tradition.</p>
+                        </div>
+                        <span class="btn-link text-white">Learn More <i class="text-white far fa-arrow-right"></i></span>
+                    </a>
                 </div>
 
-                <div class="d-block d-md-none mt-4">
-                    <div class="card shadow-sm">
-                        <div class="card-body">
-                            <h5 class="mb-3">Booking Summary</h5>
-
-                            @foreach ($selectedRooms as $r)
-                                <div class="d-flex justify-content-between">
-                                    <span>{{ $r->name }}</span>
-                                    <span>₹{{ $r->donation }}</span>
-                                </div>
-                            @endforeach
-
-                            @if ($selectedRooms->count())
-                                <hr>
-                                <div class="d-flex justify-content-between fw-bold">
-                                    <span>Total</span>
-                                    <span>₹{{ $totalAmount }}</span>
-                                </div>
-
-                                <div class="mt-3 text-end">
-                                    <a href="{{ route('room-bookings.create') }}" class="btn btn-success w-100">
-                                        Continue to Booking
-                                    </a>
-                                </div>
-                            @endif
+                <div class="col-lg-4 col-md-6 mt-negative-sm">
+                    <a href="travel.php" class="sigma_service style-1 secondary-bg">
+                        <div class="sigma_service-thumb">
+                            <i class="custom-primary flaticon-hindu-1"></i>
                         </div>
-                    </div>
+                        <div class="sigma_service-body">
+                            <h5 class="text-white">Travels</h5>
+                            <p class="text-white">Plan sacred journeys and temple visits with ease.</p>
+                        </div>
+                        <span class="text-white btn-link">Learn More <i class="text-white far fa-arrow-right"></i></span>
+                    </a>
                 </div>
-            </div> --}}
+
+                <div class="col-lg-4 col-md-6 mt-negative-sm">
+                    <a href="accomodation.php" class="sigma_service style-1 bg-white">
+                        <div class="sigma_service-thumb">
+                            <i class="flaticon-pooja"></i>
+                        </div>
+                        <div class="sigma_service-body">
+                            <h5>Accommodation</h5>
+                            <p>Comfortable and spiritual stay near temples and sacred places.</p>
+                        </div>
+                        <span class="btn-link">Learn More <i class="far fa-arrow-right"></i></span>
+                    </a>
+                </div>
+
+                <div class="col-lg-4 col-md-6">
+                    <a href="pooja.php" class="sigma_service style-1 primary-bg">
+                        <div class="sigma_service-thumb">
+                            <i class="text-white flaticon-temple"></i>
+                        </div>
+                        <div class="sigma_service-body">
+                            <h5 class="text-white">Pooja</h5>
+                            <p class="text-white">Book pooja services for all occasions and religious needs.</p>
+                        </div>
+                        <span class="btn-link text-white">Learn More <i class="text-white far fa-arrow-right"></i></span>
+                    </a>
+                </div>
+
+                <div class="col-lg-4 col-md-6 mt-negative-sm">
+                    <a href="education.php" class="sigma_service style-1 secondary-bg">
+                        <div class="sigma_service-thumb">
+                            <i class="custom-primary flaticon-hindu-1"></i>
+                        </div>
+                        <div class="sigma_service-body">
+                            <h5 class="text-white">Educational</h5>
+                            <p class="text-white">Spiritual and cultural learning programs for all age groups.</p>
+                        </div>
+                        <span class="text-white btn-link">Learn More <i class="text-white far fa-arrow-right"></i></span>
+                    </a>
+                </div>
+
+                <div class="col-lg-4 col-md-6 mt-negative-sm">
+                    <a href="kasi-grabhavasam.php" class="sigma_service style-1 bg-white">
+                        <div class="sigma_service-thumb">
+                            <i class="flaticon-pooja"></i>
+                        </div>
+                        <div class="sigma_service-body">
+                            <h5>Kasi Grabhavasam</h5>
+                            <p>Experience divine living in the spiritual heart of Kashi.</p>
+                        </div>
+                        <span class="btn-link">Learn More <i class="far fa-arrow-right"></i></span>
+                    </a>
+                </div>
+
+            </div>
+
+            <div class="text-end mt-4">
+                <a href="services.html" class="btn-link text-white">Get Started Now <i
+                        class="custom-primary far fa-arrow-right"></i></a>
+            </div>
 
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            document.querySelectorAll('.btn-toggle-cart').forEach(button => {
-                button.addEventListener('click', function() {
-                    const btn = this;
-                    const roomId = btn.getAttribute('data-room-id');
-                    const action = btn.getAttribute('data-action');
+    <!-- Puja Start -->
+    <div id="destinations" class="section section-padding">
+        <div class="container">
 
-                    const route = action === 'add' ?
-                        '{{ route('room-bookings.add-to-session') }}' :
-                        '{{ route('room-bookings.remove-from-session') }}';
+            <div class="section-title text-start">
 
-                    // Show processing text/icon
-                    const originalHTML = btn.innerHTML;
-                    btn.disabled = true;
-                    btn.innerHTML =
-                        '<span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span> Processing...';
+                <h4 class="title">Top Destinations </h4>
+                <p class="subtitle">Anything that brings people together to celebrate the glory of Goddess, we create truly
+                    memorable experiences that you will cherish forever.
+                </p>
+            </div>
 
-                    fetch(route, {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                            },
-                            body: JSON.stringify({
-                                room_id: roomId
-                            })
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.status === 'added') {
-                                btn.classList.remove('btn-outline-primary');
-                                btn.classList.add('btn-danger');
-                                btn.innerHTML =
-                                    '<i class="fas fa-times-circle me-1"></i> Remove from Cart';
-                                btn.setAttribute('data-action', 'remove');
+            <div class="row">
+                <!-- Varanasi -->
+                <div class="col-lg-4 coaching">
+                    <div class="sigma_portfolio-item style-2">
+                        <img src="{{ asset('website/assets/img/destinations/varanasi-2.jpg') }}" alt="portfolio">
+                        <div class="sigma_portfolio-item-content">
+                            <div class="sigma_portfolio-item-content-inner">
+                                <h5><a href="puja-details.html">Varanasi</a></h5>
+                            </div>
+                            <a href="puja-details.html"><i class="far fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
 
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'Added!',
-                                    text: 'Room added to cart.',
-                                    timer: 1500,
-                                    showConfirmButton: false
-                                });
-                            } else if (data.status === 'removed') {
-                                btn.classList.remove('btn-danger');
-                                btn.classList.add('btn-outline-primary');
-                                btn.innerHTML =
-                                    '<i class="fas fa-cart-plus me-1"></i> Add to Cart';
-                                btn.setAttribute('data-action', 'add');
+                <!-- Prayagraj (Allahabad) -->
+                <div class="col-lg-4 coaching">
+                    <div class="sigma_portfolio-item style-2">
+                        <img src="{{ asset('website/assets/img/destinations/prayagraj-1.jpg') }}" alt="portfolio">
+                        <div class="sigma_portfolio-item-content">
+                            <div class="sigma_portfolio-item-content-inner">
+                                <h5><a href="puja-details.html">Prayagraj (Allahabad)</a></h5>
+                            </div>
+                            <a href="puja-details.html"><i class="far fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
 
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'Removed!',
-                                    text: 'Room removed from cart.',
-                                    timer: 1500,
-                                    showConfirmButton: false
-                                });
-                            } else {
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'Error',
-                                    text: 'Something went wrong. Please try again.'
-                                });
-                                btn.innerHTML = originalHTML;
-                            }
-                        })
-                        .catch(() => {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error',
-                                text: 'Network error. Please try again later.'
-                            });
-                            btn.innerHTML = originalHTML;
-                        })
-                        .finally(() => {
-                            btn.disabled = false;
-                        });
-                });
-            });
-        });
-    </script>
+                <!-- Ujjain -->
+                <div class="col-lg-4 coaching">
+                    <div class="sigma_portfolio-item style-2">
+                        <img src="{{ asset('website/assets/img/destinations/Ujjain-2.jpg') }}" alt="portfolio">
+                        <div class="sigma_portfolio-item-content">
+                            <div class="sigma_portfolio-item-content-inner">
+                                <h5><a href="puja-details.html">Ujjain</a></h5>
+                            </div>
+                            <a href="puja-details.html"><i class="far fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gaya -->
+                <div class="col-lg-4 coaching">
+                    <div class="sigma_portfolio-item style-2">
+                        <img src="{{ asset('website/assets/img/destinations/gaya-5.jpg') }}" alt="portfolio">
+                        <div class="sigma_portfolio-item-content">
+                            <div class="sigma_portfolio-item-content-inner">
+                                <h5><a href="puja-details.html">Gaya</a></h5>
+                            </div>
+                            <a href="puja-details.html"><i class="far fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sitamarhi -->
+                <div class="col-lg-4 coaching">
+                    <div class="sigma_portfolio-item style-2">
+                        <img src="{{ asset('website/assets/img/destinations/sitamarhi-2.jpg') }}" alt="portfolio">
+                        <div class="sigma_portfolio-item-content">
+                            <div class="sigma_portfolio-item-content-inner">
+                                <h5><a href="puja-details.html">Sitamarhi</a></h5>
+                            </div>
+                            <a href="puja-details.html"><i class="far fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Vindhyachal -->
+                <div class="col-lg-4 coaching">
+                    <div class="sigma_portfolio-item style-2">
+                        <img src="{{ asset('website/assets/img/destinations/Vindhyachal-1.jpg') }}" alt="portfolio">
+                        <div class="sigma_portfolio-item-content">
+                            <div class="sigma_portfolio-item-content-inner">
+                                <h5><a href="puja-details.html">Vindhyachal</a></h5>
+                            </div>
+                            <a href="puja-details.html"><i class="far fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Naimisaranya -->
+                <div class="col-lg-4 coaching">
+                    <div class="sigma_portfolio-item style-2">
+                        <img src="{{ asset('website/assets/img/destinations/naimisharanya-4.jpg') }}" alt="portfolio">
+                        <div class="sigma_portfolio-item-content">
+                            <div class="sigma_portfolio-item-content-inner">
+                                <h5><a href="puja-details.html">Naimisaranya</a></h5>
+                            </div>
+                            <a href="puja-details.html"><i class="far fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ayodhya -->
+                <div class="col-lg-4 coaching">
+                    <div class="sigma_portfolio-item style-2">
+                        <img src="{{ asset('website/assets/img/destinations/ayothi-first.jpg') }}" alt="portfolio">
+                        <div class="sigma_portfolio-item-content">
+                            <div class="sigma_portfolio-item-content-inner">
+                                <h5><a href="puja-details.html">Ayodhya</a></h5>
+                            </div>
+                            <a href="puja-details.html"><i class="far fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Vinayak In Kasi -->
+                <div class="col-lg-4 coaching">
+                    <div class="sigma_portfolio-item style-2">
+                        <img src="{{ asset('website/assets/img/destinations/vinay-k-3.jpg') }}" alt="portfolio">
+                        <div class="sigma_portfolio-item-content">
+                            <div class="sigma_portfolio-item-content-inner">
+                                <h5><a href="puja-details.html">Vinayak In Kasi</a></h5>
+                            </div>
+                            <a href="puja-details.html"><i class="far fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+    <!-- Puja End -->
+
+    <!-- Testimonials Start -->
+    <section id="testimonials" class="section pt-0">
+
+        <div class="container testimonial-section bg-contain bg-norepeat bg-center"
+            style="background-image: url({{ asset('website/assets/img/textures/map-2.png') }})">
+
+            <div class="section-title text-center">
+                <p class="subtitle">Testimonials</p>
+                <h4 class="title">What Our Congregation Say</h4>
+            </div>
+
+            <div class="sigma_testimonial style-2">
+                <div class="sigma_testimonial-slider">
+
+                    <div class="sigma_testimonial-inner">
+                        <div class="sigma_testimonial-thumb">
+                            <img src="{{ asset('website/assets/img/testimonials/1.jpg') }}" alt="testimonial">
+                        </div>
+                        <div>
+                            <div class="sigma_testimonial-body">
+                                <div class="sigma_rating-wrapper">
+                                    <div class="sigma_rating">
+                                        <i class="fas fa-star active"></i>
+                                        <i class="fas fa-star active"></i>
+                                        <i class="fas fa-star active"></i>
+                                        <i class="fas fa-star active"></i>
+                                        <i class="far fa-star"></i>
+                                    </div>
+                                </div>
+                                <p>I'm very happy to stay in Gayathri Ashramam. The food is awesome. Thank you for providing
+                                    good food free of cost. Great experience — thank you guys!</p>
+                            </div>
+                            <div class="sigma_testimonial-footer">
+                                <div class="sigma_testimonial-author">
+                                    <cite>Janardhan KVN
+                                    </cite>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sigma_testimonial-inner">
+                        <div class="sigma_testimonial-thumb">
+                            <img src="{{ asset('website/assets/img/testimonials/2.jpg') }}" alt="testimonial">
+                        </div>
+                        <div>
+                            <div class="sigma_testimonial-body">
+                                <div class="sigma_rating-wrapper">
+                                    <div class="sigma_rating">
+                                        <i class="fas fa-star active"></i>
+                                        <i class="fas fa-star active"></i>
+                                        <i class="fas fa-star active"></i>
+                                        <i class="fas fa-star active"></i>
+                                        <i class="far fa-star"></i>
+                                    </div>
+                                </div>
+                                <p>We have been to this place just this week. They made our experience really memorable.
+                                    They took great care of our grandparents. The food feels just like home.</p>
+                            </div>
+                            <div class="sigma_testimonial-footer">
+                                <div class="sigma_testimonial-author">
+                                    <cite>Swetha Bandapalli
+
+                                    </cite>
+                                    {{-- <span>Executive</span> --}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sigma_testimonial-inner">
+                        <div class="sigma_testimonial-thumb">
+                            <img src="{{ asset('website/assets/img/testimonials/3.jpg') }}" alt="testimonial">
+                        </div>
+                        <div>
+                            <div class="sigma_testimonial-body">
+                                <div class="sigma_rating-wrapper">
+                                    <div class="sigma_rating">
+                                        <i class="fas fa-star active"></i>
+                                        <i class="fas fa-star active"></i>
+                                        <i class="fas fa-star active"></i>
+                                        <i class="fas fa-star active"></i>
+                                        <i class="far fa-star"></i>
+                                    </div>
+                                </div>
+                                <p>I'm very happy to stay in Gayathri Ashramam. The food is awesome. Thank you for providing
+                                    good food free of cost. Great experience — thank you guys!</p>
+                            </div>
+                            <div class="sigma_testimonial-footer">
+                                <div class="sigma_testimonial-author">
+                                    <cite>Shiva Bavagari</cite>
+                                    {{-- <span>Pandit</span> --}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="text-center mt-4">
+                <div class="sigma_arrows style-2">
+                    <i class="far fa-chevron-left slick-arrow slider-prev"></i>
+                    <i class="far fa-chevron-right slick-arrow slider-next"></i>
+                </div>
+            </div>
+
+        </div>
+    </section>
+    <!-- Testimonials End -->
 @endsection

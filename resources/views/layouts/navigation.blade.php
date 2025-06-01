@@ -29,6 +29,15 @@
             </a>
         </li>
 
+        <li class="menu-item {{ request()->routeIs('donor-calendar') ? 'active' : '' }}">
+            <a href="{{ route('donor-calendar') }}" class="menu-link">
+                <i class="menu-icon fas fa-hand-holding-heart"></i>
+                <span class="menu-text">Donor Calendar</span>
+            </a>
+        </li>
+
+
+
         <li class="menu-item {{ request()->routeIs('room-bookings.*') ? 'active open' : '' }}">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon fas fa-calendar-check"></i>

@@ -12,7 +12,16 @@ use Illuminate\Support\Facades\Log;
 
 class IndexController extends Controller
 {
-    public function index(Request $request)
+
+
+    public function index()
+    {
+        $rooms = Room::where('active', 1)->get();
+        return view('website.index', compact('rooms'));
+    }
+
+
+    public function roombookings(Request $request)
     {
         $bookingFrom = $request->booking_from ?? now()->toDateString();
         $bookingTo = $request->booking_to ?? now()->addDay()->toDateString();
@@ -56,7 +65,7 @@ class IndexController extends Controller
         ]);
 
 
-        return view('website.index', compact('rooms'));
+        return view('website.roombookings', compact('rooms'));
     }
 
     public function confirm()
