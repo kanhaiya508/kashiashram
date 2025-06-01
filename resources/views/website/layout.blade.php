@@ -140,33 +140,33 @@
     <!-- partial:partia/__mobile-nav.html -->
     <aside class="sigma_aside sigma_aside-left">
 
-        <a class="navbar-brand" href="index.html"> <img src="{{ asset('website/assets/img/logo_big.png') }}"
+        <a class="navbar-brand" href="{{route('index')}}"> <img src="{{ asset('website/assets/img/logo_big.png') }}"
                 alt="logo"> </a>
 
         <!-- Menu -->
         <ul>
             <li class="menu-item">
-                <a href="#">Home</a>
+                <a href="{{route('index')}}#">Home</a>
 
             </li>
             <li class="menu-item ">
-                <a href="#about">About Us</a>
+                <a href="{{route('index')}}#about">About Us</a>
             </li>
             <li class="menu-item ">
-                <a href="#service">Service</a>
+                <a href="{{route('index')}}#service">Service</a>
             </li>
 
 
             <li class="menu-item ">
-                <a href="#destinations">Destinations</a>
-            </li>
-
-            <li class="menu-item ">
-                <a href="#testimonials">Testimonials</a>
+                <a href="{{route('index')}}#destinations">Destinations</a>
             </li>
 
             <li class="menu-item ">
-                <a href="#Donation"> Donation </a>
+                <a href="{{route('index')}}#testimonials">Testimonials</a>
+            </li>
+
+            <li class="menu-item ">
+                <a href="{{route('index')}}#Donation"> Donation </a>
             </li>
 
             <li class="menu-item ">
@@ -222,28 +222,28 @@
                 <!-- Menu -->
                 <ul class="navbar-nav">
                     <li class="menu-item">
-                        <a href="#">Home</a>
+                        <a href="{{route('index')}}#">Home</a>
 
                     </li>
                     <li class="menu-item ">
-                        <a href="#about">About Us</a>
+                        <a href="{{route('index')}}#about">About Us</a>
                     </li>
                     <li class="menu-item ">
-                        <a href="#service">Service</a>
-                    </li>
-
-
-                    <li class="menu-item ">
-                        <a href="#destinations">Destinations</a>
-                    </li>
-
-                    <li class="menu-item ">
-                        <a href="#testimonials">Testimonials</a>
+                        <a href="{{route('index')}}#service">Service</a>
                     </li>
 
 
                     <li class="menu-item ">
-                        <a href="#testimonials">Donation</a>
+                        <a href="{{route('index')}}#destinations">Destinations</a>
+                    </li>
+
+                    <li class="menu-item ">
+                        <a href="{{route('index')}}#testimonials">Testimonials</a>
+                    </li>
+
+
+                    <li class="menu-item ">
+                        <a href="{{route('index')}}#testimonials">Donation</a>
                     </li>
 
 

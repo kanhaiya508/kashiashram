@@ -32,7 +32,7 @@
                     <div class="col-md-6">
                         <div class="card mb-4 shadow-sm rounded">
                             <div class="card-body">
-                                <h5 class="mb-4 fw-semibold text-primary">Selected Rooms</h5>
+                                <h5 class="mb-4 text-center ">Selected Rooms</h5>
 
                                 @php $total = 0; @endphp
                                 @foreach ($rooms as $room)
@@ -86,7 +86,7 @@
                     <div class="col-md-6">
                         <div class="card shadow-sm">
                             <div class="card-body">
-                                <h5 class="mb-3">Customer Details</h5>
+                                <h5 class="mb-3  text-center ">Customer Details</h5>
 
                                 @if ($errors->any())
                                     <div class="alert alert-danger">
@@ -162,7 +162,7 @@
                                     </div>
                                 </div>
 
-                                <button type="submit" class="sigma_btn-customc mt-2">Confirm Booking</button>
+                                <button type="submit" class="sigma_btn-custom  mt-2">Confirm Booking</button>
                             </div>
                         </div>
                     </div>
