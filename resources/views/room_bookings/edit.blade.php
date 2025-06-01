@@ -64,6 +64,41 @@
                                 value="{{ old('aadhar', $booking->aadhar) }}">
                         </div>
 
+                        <div class="col-md-4 mb-3">
+                            <label for="gothra">Gothra</label>
+                            <input type="text" id="gothra" name="gothra"
+                                value="{{ old('gothra', $booking->gothra) }}" class="form-control">
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <label for="user_type">User Type</label>
+                            <select name="user_type" id="user_type" class="form-control">
+                                <option value="Donar"
+                                    {{ old('user_type', $booking->user_type) == 'Donar' ? 'selected' : '' }}>Donar
+                                </option>
+                                <option value="New Yatri"
+                                    {{ old('user_type', $booking->user_type) == 'New Yatri' ? 'selected' : '' }}>New
+                                    Yatri</option>
+                                <option value="Regular Yatri"
+                                    {{ old('user_type', $booking->user_type) == 'Regular Yatri' ? 'selected' : '' }}>
+                                    Regular Yatri</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <label for="travel_type">Travel Type</label>
+                            <select name="travel_type" id="travel_type" class="form-control">
+                                <option value="Bus"
+                                    {{ old('travel_type', $booking->travel_type) == 'Bus' ? 'selected' : '' }}>Bus
+                                </option>
+                                <option value="Train"
+                                    {{ old('travel_type', $booking->travel_type) == 'Train' ? 'selected' : '' }}>Train
+                                </option>
+                                <option value="Flight"
+                                    {{ old('travel_type', $booking->travel_type) == 'Flight' ? 'selected' : '' }}>
+                                    Flight</option>
+                            </select>
+                        </div>
 
                         <div class="col-md-4 mb-3">
                             <label class="form-label">Adults</label>

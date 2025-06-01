@@ -1,56 +1,126 @@
 <x-app-layout>
     <div class="container-xxl flex-grow-1 container-p-y">
-        <h4 class="fw-bold py-3 mb-4">
-            <span class="text-muted fw-light">Dashboard /</span> Room Bookings
-        </h4>
+
+
+        <div class="d-flex  flex-md-row justify-content-between align-items-start align-items-md-center mb-3">
+            <h4 class="fw-bold mb-2 mb-md-0">
+                <span class="text-muted fw-light">Dashboard /</span> Room Bookings
+            </h4>
+
+            <button type="button" class="btn btn-outline-dark d-md-inline-block d-block" id="toggleFilter">
+                <i class="fas fa-filter"></i> Filter
+            </button>
+        </div>
+
+
+
 
         <div class="card">
             <div class="card-header">
-                <div class="d-flex flex-wrap justify-content-between align-items-center">
+
+                <div id="filterForm" class="d-none d-md-block w-100">
 
 
-                    <form method="GET" action="{{ route('room-bookings.index') }}" class="row gy-2 gx-2 align-items-end">
-                        <div class="col-md-3">
-                            <label class="form-label mb-0 small">Customer Name</label>
-                            <input type="search" name="search" value="{{ request('search') }}" class="form-control"
-                                placeholder="Search by name">
-                        </div>
+                    <div class="d-flex flex-wrap justify-content-between align-items-center">
 
-                        <div class="col-md-2">
-                            <label class="form-label mb-0 small">Phone</label>
-                            <input type="text" name="phone" value="{{ request('phone') }}" class="form-control"
-                                placeholder="Phone">
-                        </div>
 
-                        <div class="col-md-2">
-                            <label class="form-label mb-0 small">Status</label>
-                            <select name="status" class="form-select">
-                                <option value="">All</option>
-                                <option value="booked" {{ request('status') == 'booked' ? 'selected' : '' }}>Booked
-                                </option>
-                                <option value="cancelled" {{ request('status') == 'cancelled' ? 'selected' : '' }}>
-                                    Cancelled</option>
-                                <option value="completed" {{ request('status') == 'completed' ? 'selected' : '' }}>
-                                    Completed</option>
-                            </select>
-                        </div>
+                        <form method="GET" action="{{ route('room-bookings.index') }}"
+                            class="row gy-2 gx-2 align-items-end">
+                            <div class="col-md-2  col-6">
+                                <label class="form-label mb-0 small">Customer Name</label>
+                                <input type="search" name="search" value="{{ request('search') }}"
+                                    class="form-control" placeholder="Search Here...">
+                            </div>
 
-                        <div class="col-md-2">
-                            <label class="form-label mb-0 small">From Date</label>
-                            <input type="date" name="from_date" value="{{ request('from_date') }}"
-                                class="form-control">
-                        </div>
 
-                        <div class="col-md-2">
-                            <label class="form-label mb-0 small">To Date</label>
-                            <input type="date" name="to_date" value="{{ request('to_date') }}" class="form-control">
-                        </div>
+                            <div class="col-md-2  col-6">
+                                <label class="form-label mb-0 small">Status</label>
+                                <select name="status" class="form-select">
+                                    <option value="">All</option>
+                                    <option value="booked" {{ request('status') == 'booked' ? 'selected' : '' }}>Booked
+                                    </option>
+                                    <option value="cancelled" {{ request('status') == 'cancelled' ? 'selected' : '' }}>
+                                        Cancelled</option>
+                                    <option value="completed" {{ request('status') == 'completed' ? 'selected' : '' }}>
+                                        Completed</option>
+                                </select>
+                            </div>
 
-                        <div class="col-md-1">
-                            <button class="btn btn-primary">Filter</button>
-                        </div>
-                    </form>
+                            <div class="col-md-2  col-6 ">
+                                <label for="user_type">User Type</label>
+                                <select name="user_type" id="user_type" class="form-control">
+                                    <option value="">-- Select User Type --</option>
+                                    <option value="Donar" {{ request('user_type') == 'Donar' ? 'selected' : '' }}>
+                                        Donar
+                                    </option>
+                                    <option value="New Yatri"
+                                        {{ request('user_type') == 'New Yatri' ? 'selected' : '' }}>
+                                        New Yatri</option>
+                                    <option value="Regular Yatri"
+                                        {{ request('user_type') == 'Regular Yatri' ? 'selected' : '' }}>Regular Yatri
+                                    </option>
+                                </select>
+                            </div>
 
+                            <div class="col-md-2  col-6 ">
+                                <label for="travel_type">Travel Type</label>
+                                <select name="travel_type" id="travel_type" class="form-control">
+                                    <option value="">-- Select Travel Type --</option>
+                                    <option value="Bus" {{ request('travel_type') == 'Bus' ? 'selected' : '' }}>Bus
+                                    </option>
+                                    <option value="Train" {{ request('travel_type') == 'Train' ? 'selected' : '' }}>
+                                        Train
+                                    </option>
+                                    <option value="Flight" {{ request('travel_type') == 'Flight' ? 'selected' : '' }}>
+                                        Flight</option>
+                                </select>
+                            </div>
+
+
+
+                            <div class="col-md-3">
+                                <div class="row">
+                                    <div class="col-md-6 col-6">
+                                        <label class="form-label small">From Date</label>
+
+                                        <input type="date" name="from_date" value="{{ request('from_date') }}"
+                                            class="form-control " placeholder="From">
+
+                                    </div>
+
+                                    <div class="col-md-6 col-6">
+                                        <label class="form-label small">To Date</label>
+                                        <input type="date" name="to_date" value="{{ request('to_date') }}"
+                                            class="form-control" placeholder="To">
+                                    </div>
+
+
+                                </div>
+
+                            </div>
+                            <div class="col-md-12 col-12">
+                                <div
+                                    class="d-flex  flex-md-row justify-content-between align-items-start align-items-md-center mb-3 gap-2">
+
+                                    <button type="submit" name="action" value="filter" class="btn btn-primary">
+                                        Filter
+                                    </button>
+
+                                    <a href="{{ route('room-bookings.index') }}" class="btn btn-dark">
+                                        Clear
+                                    </a>
+
+                                    <button type="submit" name="action" value="download_excel" class="btn btn-info">
+                                        <i class="fas fa-file-excel me-1"></i> Download Excel
+                                    </button>
+
+
+                                </div>
+
+                            </div>
+                        </form>
+
+                    </div>
                 </div>
             </div>
             <div class="card-body">
@@ -72,7 +142,20 @@
                             @foreach ($bookings as $booking)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $booking->name }}</td>
+                                    <td>{{ $booking->name }}
+
+                                        User Type:
+
+                                        @if ($booking->user_type == 'Donar')
+                                            <span class="badge bg-success">Donar</span>
+                                        @elseif ($booking->user_type == 'New Yatri')
+                                            <span class="badge bg-primary">New Yatri</span>
+                                        @elseif ($booking->user_type == 'Regular Yatri')
+                                            <span class="badge bg-info">Regular Yatri</span>
+                                        @else
+                                            <span class="badge bg-warning">Unknown</span>
+                                        @endif
+                                    </td>
                                     <td>{{ $booking->phone }}</td>
                                     <td>
                                         {{ \Carbon\Carbon::parse($booking->booking_from)->format('d-m-Y') }}
@@ -216,5 +299,29 @@
             });
         </script>
     @endpush
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const toggleBtn = document.getElementById('toggleFilter');
+            const filterForm = document.getElementById('filterForm');
+
+            toggleBtn.addEventListener('click', function() {
+                filterForm.classList.toggle('d-none');
+            });
+
+            // Auto-open if any filter is applied
+            const urlParams = new URLSearchParams(window.location.search);
+            if (
+                urlParams.has('search') ||
+                urlParams.has('status') ||
+                urlParams.has('user_type') ||
+                urlParams.has('travel_type') ||
+                urlParams.has('from_date') ||
+                urlParams.has('to_date')
+            ) {
+                filterForm.classList.remove('d-none');
+            }
+        });
+    </script>
 
 </x-app-layout>

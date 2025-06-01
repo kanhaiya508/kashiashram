@@ -60,8 +60,9 @@
                             <div class="mb-3">
                                 <label>User Type</label>
                                 <select name="user_type" class="form-control">
-                                    <option value="Donar">Donar</option>
-                                    <option value="General">General</option>
+                                    <option value="Donar"> Donar </option>
+                                    <option value="New Yatri"> New Yatri </option>
+                                    <option value="Regular Yatri"> Regular Yatri </option>
                                 </select>
                             </div>
                             <div class="mb-3">

@@ -9,6 +9,8 @@ use App\Models\RoomBooking;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Barryvdh\DomPDF\Facade\Pdf;
+use App\Exports\BookingsExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class RoomBookingController extends Controller
 {
@@ -19,6 +21,7 @@ class RoomBookingController extends Controller
 
         if ($request->filled('search')) {
             $query->where('name', 'like', '%' . $request->search . '%');
+            $query->where('gothra', 'like', '%' . $request->search . '%');
         }
 
         if ($request->filled('phone')) {
@@ -29,13 +32,25 @@ class RoomBookingController extends Controller
             $query->where('status', $request->status);
         }
 
+        if ($request->filled('user_type')) {
+            $query->where('user_type', $request->user_type);
+        }
+
+        if ($request->filled('travel_type')) {
+            $query->where('travel_type', $request->travel_type);
+        }
+
         if ($request->filled('from_date') && $request->filled('to_date')) {
             $query->whereBetween('booking_from', [$request->from_date, $request->to_date]);
         }
 
-        $bookings = $query->latest()->paginate(10)->withQueryString();
-
-        return view('room_bookings.index', compact('bookings'));
+        if ($request->input('action') === 'download_excel') {
+            $bookings = $query->latest()->get();
+            return Excel::download(new BookingsExport($bookings), 'room_bookings.xlsx');
+        } else {
+            $bookings = $query->latest()->paginate(10)->withQueryString();
+            return view('room_bookings.index', compact('bookings'));
+        }
     }
 
 
@@ -45,22 +60,39 @@ class RoomBookingController extends Controller
         $query = \App\Models\Booking::with('rooms.room')
             ->where('status', 'applied'); // sirf applied status wale
 
+
         if ($request->filled('search')) {
             $query->where('name', 'like', '%' . $request->search . '%');
+            $query->where('gothra', 'like', '%' . $request->search . '%');
         }
 
         if ($request->filled('phone')) {
             $query->where('phone', 'like', '%' . $request->phone . '%');
         }
 
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        if ($request->filled('user_type')) {
+            $query->where('user_type', $request->user_type);
+        }
+
+        if ($request->filled('travel_type')) {
+            $query->where('travel_type', $request->travel_type);
+        }
+
         if ($request->filled('from_date') && $request->filled('to_date')) {
             $query->whereBetween('booking_from', [$request->from_date, $request->to_date]);
         }
 
-        $bookings = $query->latest()->paginate(10)->withQueryString();
-
-        // Alag view bana sakte ho enquiry ke liye ya same view use karo
-        return view('room_bookings.enquiry', compact('bookings'));
+        if ($request->input('action') === 'download_excel') {
+            $bookings = $query->latest()->get();
+            return Excel::download(new BookingsExport($bookings), 'room_bookings.xlsx');
+        } else {
+            $bookings = $query->latest()->paginate(10)->withQueryString();
+            return view('room_bookings.enquiry', compact('bookings'));
+        }
     }
 
     public function create()
@@ -312,6 +344,9 @@ class RoomBookingController extends Controller
                 'email' => $request->email,
                 'aadhar' => $request->aadhar,
                 'message' => $request->message,
+                'user_type' => $request->user_type,
+                'travel_type' => $request->travel_type,
+                'gothra' => $request->gothra,
                 'status' => $request->status,
                 'adults' => $request->adults,
                 'children' => $request->children,
