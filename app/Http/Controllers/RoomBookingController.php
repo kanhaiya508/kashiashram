@@ -212,6 +212,7 @@ class RoomBookingController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'phone' => 'required|string|max:20',
+            'payment_status' => 'required',
             'email' => 'nullable|email',
             'aadhar' => 'nullable|string',
             'message' => 'nullable|string',
@@ -224,7 +225,18 @@ class RoomBookingController extends Controller
         DB::beginTransaction();
 
         try {
-            // Step 1: Create the master booking
+            // Step 1: Calculate total room capacity
+            $rooms = Room::whereIn('id', $roomIds)->get();
+            $totalCapacity = $rooms->sum('room_capacity');
+
+            // Step 2: Total People
+            $totalPeople = ($request->adults ?? 0) + ($request->children ?? 0);
+
+            // Step 3: Extra person charge
+            $extraPeople = max(0, $totalPeople - $totalCapacity);
+            $extraCharge = $extraPeople * 299;
+
+            // Step 4: Create master booking
             $booking = Booking::create([
                 'name' => $request->name,
                 'phone' => $request->phone,
@@ -236,16 +248,14 @@ class RoomBookingController extends Controller
                 'travel_type' => $request->travel_type,
                 'booking_from' => $bookingFrom,
                 'booking_to' => $bookingTo,
-
-
                 'adults' => $request->adults,
                 'children' => $request->children,
-
-
                 'status' => $request->status,
+                'payment_status' => $request->payment_status,
+                'extra_charge' => $extraCharge, // Optional: Add this column to `bookings` table
             ]);
 
-            // Step 2: Save all room bookings
+            // Step 5: Save room-wise bookings
             foreach ($roomIds as $roomId) {
                 $amount = $request->amounts[$roomId] ?? 0;
                 RoomBooking::create([
@@ -255,18 +265,16 @@ class RoomBookingController extends Controller
                 ]);
             }
 
-            // Step 3: Clear session
-            session()->forget(['selected_rooms', 'booking_from', 'booking_to']);
-
             DB::commit();
 
-            return redirect()->route('room-bookings.index')->with('success', 'Booking confirmed successfully.');
+            session()->forget(['selected_rooms', 'booking_from', 'booking_to']);
+
+            return redirect()->route('room-bookings.index')->with('success', 'Booking confirmed successfully. Extra charges (if any): ₹' . $extraCharge);
         } catch (\Exception $e) {
             DB::rollBack();
             return back()->with('error', 'Something went wrong: ' . $e->getMessage());
         }
     }
-
     public function status_update($id, $status)
     {
         $booking = Booking::findOrFail($id);
@@ -355,6 +363,8 @@ class RoomBookingController extends Controller
                 'status' => $request->status,
                 'adults' => $request->adults,
                 'children' => $request->children,
+                'payment_status' => $request->payment_status,
+
             ]);
 
             // Update room booking amounts

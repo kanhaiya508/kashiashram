@@ -50,7 +50,7 @@ class RoomController extends Controller implements HasMiddleware
             'no_of_beds' => 'required|integer',
             'room_type' => 'required|in:AC,Non-AC',
             'room_capacity' => 'required|integer|min:1',
-            'extra_charges' => 'nullable|numeric|min:0',
+
             'image' => 'nullable|image',
         ]);
 
@@ -61,7 +61,6 @@ class RoomController extends Controller implements HasMiddleware
             'no_of_beds',
             'room_type',
             'room_capacity',
-            'extra_charges',
             'active'
         ]);
 
@@ -92,7 +91,6 @@ class RoomController extends Controller implements HasMiddleware
             'no_of_beds' => 'required|integer',
             'room_type' => 'required|in:AC,Non-AC',
             'room_capacity' => 'required|integer|min:1',
-            'extra_charges' => 'nullable|numeric|min:0',
             'image' => 'nullable|image',
         ]);
 
@@ -103,7 +101,6 @@ class RoomController extends Controller implements HasMiddleware
             'no_of_beds',
             'room_type',
             'room_capacity',
-            'extra_charges',
             'active'
         ]);
 

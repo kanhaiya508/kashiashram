@@ -36,7 +36,7 @@
         }
 
         .note {
-            font-size: 11px;
+            font-size: 16px;
             margin-top: 10px;
         }
     </style>
@@ -88,22 +88,38 @@
             <td>{{ $booking->booking_to->format('d-m-Y') }}</td>
         </tr>
 
-        @php $total = $booking->rooms->sum('amount'); @endphp
+        @php
+            $roomTotal = $booking->rooms->sum('amount');
+            $extraCharge = $booking->extra_charge ?? 0;
+            $finalTotal = $roomTotal + $extraCharge;
+        @endphp
+
         <tr>
-            <th>Total Amount</th>
-            <td>₹{{ number_format($total, 2) }}</td>
+            <th>Room Total</th>
+            <td>₹{{ number_format($roomTotal, 2) }}</td>
+        </tr>
+        @if ($extraCharge > 0)
+            <tr>
+                <th>Extra Charges<br><small class="text-muted">(Additional persons)</small></th>
+                <td>₹{{ number_format($extraCharge, 2) }}</td>
+            </tr>
+        @endif
+        <tr class="table-primary fw-bold">
+            <th>Final Total Amount</th>
+            <td>₹{{ number_format($finalTotal, 2) }}</td>
         </tr>
         <tr>
             <th>Paying Amount</th>
-            <td>₹0.00</td>
+            <td>₹0.00</td> {{-- You can replace this with actual payment amount if available --}}
         </tr>
         <tr>
             <th>Remaining Balance</th>
-            <td>₹{{ number_format($total, 2) }}</td>
+            <td>₹{{ number_format($finalTotal, 2) }}</td> {{-- Adjust if payment is applied --}}
         </tr>
+
         <tr>
             <th>No. of People</th>
-            <td>—</td>
+            <td>{{ $booking->adults + $booking->children }}</td>
         </tr>
         <tr>
             <th>Travel Type</th>

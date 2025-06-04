@@ -51,15 +51,7 @@
         @enderror
     </div>
 
-    <div class="col-md-6 mb-3">
-        <label class="form-label">Extra Charges</label>
-        <input type="number" step="0.01" name="extra_charges" class="form-control"
-            value="{{ old('extra_charges', $room->extra_charges ?? '') }}">
-        @error('extra_charges')
-            <div class="text-danger mt-1">{{ $message }}</div>
-        @enderror
-    </div>
-
+  
 
     <div class="col-md-6 mb-3">
         <label class="form-label">Room Type</label>

@@ -43,8 +43,7 @@
                                     <p class="mb-1"><strong>Beds:</strong> {{ $room->no_of_beds }}</p>
                                     <p class="mb-1"><strong>Capacity:</strong> {{ $room->room_capacity }} persons</p>
                                     <p class="mb-1"><strong>Donation:</strong> ₹{{ $room->donation }}</p>
-                                    <p class="mb-1"><strong>Extra Charges:</strong>
-                                        ₹{{ number_format($room->extra_charges, 2) }}</p>
+                                  
                                     <p class="mb-1"><strong>Active:</strong> {{ $room->active ? 'Yes' : 'No' }}</p>
                                 </div>
 

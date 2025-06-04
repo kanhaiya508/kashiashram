@@ -123,6 +123,17 @@
                                 @endforeach
                             </select>
                         </div>
+
+                        <div class="mb-3">
+                            <label for="payment_status" class="form-label fw-semibold">Payment Status</label>
+                            <select name="payment_status" id="payment_status" class="form-select" required>
+                                <option value="unpaid" {{ old('payment_status') == 'unpaid' ? 'selected' : '' }}>Unpaid
+                                </option>
+                                <option value="paid" {{ old('payment_status') == 'paid' ? 'selected' : '' }}>Paid
+                                </option>
+                            </select>
+                        </div>
+
                         <div class="  col-md-12  mb-3">
                             <label class="form-label">Message</label>
                             <textarea name="message" class="form-control">{{ old('message', $booking->message) }}</textarea>

@@ -39,6 +39,12 @@
                             <div class="text-end fw-bold fs-5 mt-3">
                                 Estimated Total: ₹<span id="total-amount">{{ $total }}</span>
                             </div>
+                            <div class="text-end small text-muted">
+                                Total Room Capacity: <span id="room-capacity-count">0</span><br>
+                                Total People: <span id="total-people-count">0</span><br>
+                                Extra People: <span id="extra-person-count">0</span><br>
+                                Extra Charges (₹299 per person): ₹<span id="extra-charge-amount">0</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -78,7 +84,7 @@
                             <div class="mb-3">
                                 <label>Number of Adults</label>
                                 <select name="adults" class="form-control" required>
-                                    @for ($i = 1; $i <= 20; $i++)
+                                    @for ($i = 1; $i <= 50; $i++)
                                         <option value="{{ $i }}"
                                             {{ old('adults') == $i ? 'selected' : '' }}>
                                             {{ $i }}</option>
@@ -89,7 +95,7 @@
                             <div class="mb-3">
                                 <label>Number of Children</label>
                                 <select name="children" class="form-control" required>
-                                    @for ($i = 0; $i <= 10; $i++)
+                                    @for ($i = 0; $i <= 50; $i++)
                                         <option value="{{ $i }}"
                                             {{ old('children') == $i ? 'selected' : '' }}>
                                             {{ $i }}</option>
@@ -122,6 +128,15 @@
 
 
                             <div class="mb-3">
+                                <label>Payment Status</label>
+                                <select name="payment_status" class="form-control" required>
+                                    <option value="unpaid" selected>Unpaid</option>
+                                    <option value="paid">Paid</option>
+                                </select>
+                            </div>
+
+
+                            <div class="mb-3">
                                 <label>Message</label>
                                 <textarea name="message" rows="3" class="form-control"></textarea>
                             </div>
@@ -139,6 +154,21 @@
         document.addEventListener('DOMContentLoaded', function() {
             const inputs = document.querySelectorAll('.room-amount-input');
             const totalDisplay = document.getElementById('total-amount');
+            const adultsSelect = document.querySelector('[name="adults"]');
+            const childrenSelect = document.querySelector('[name="children"]');
+
+            const capacityCount = document.getElementById('room-capacity-count');
+            const totalPeopleCount = document.getElementById('total-people-count');
+            const extraPersonCount = document.getElementById('extra-person-count');
+            const extraChargeAmount = document.getElementById('extra-charge-amount');
+
+            function getTotalRoomCapacity() {
+                let totalCapacity = 0;
+                @foreach ($rooms as $room)
+                    totalCapacity += {{ $room->room_capacity }};
+                @endforeach
+                return totalCapacity;
+            }
 
             function updateTotal() {
                 let total = 0;
@@ -148,15 +178,37 @@
                         total += value;
                     }
                 });
+
+                const adults = parseInt(adultsSelect.value) || 0;
+                const children = parseInt(childrenSelect.value) || 0;
+                const totalPeople = adults + children;
+
+                const roomCapacity = getTotalRoomCapacity();
+
+                // Update counts
+                capacityCount.textContent = roomCapacity;
+                totalPeopleCount.textContent = totalPeople;
+
+                let extraPeople = 0;
+                let extraCharge = 0;
+                if (totalPeople > roomCapacity) {
+                    extraPeople = totalPeople - roomCapacity;
+                    extraCharge = extraPeople * 299;
+                }
+
+                extraPersonCount.textContent = extraPeople;
+                extraChargeAmount.textContent = extraCharge;
+
+                total += extraCharge;
                 totalDisplay.textContent = total.toFixed(2);
             }
 
-            inputs.forEach(input => {
-                input.addEventListener('input', updateTotal);
-            });
+            // Event listeners
+            inputs.forEach(input => input.addEventListener('input', updateTotal));
+            adultsSelect.addEventListener('change', updateTotal);
+            childrenSelect.addEventListener('change', updateTotal);
 
-            // Initial total sync (in case any default changed)
-            updateTotal();
+            updateTotal(); // Initial call
         });
     </script>
 

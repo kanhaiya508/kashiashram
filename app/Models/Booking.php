@@ -20,6 +20,8 @@ class Booking extends Model
         'status',
         'adults',
         'children',
+        'extra_charge',
+        'payment_status'
     ];
     protected $casts = [
         'booking_from' => 'date',

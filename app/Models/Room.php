@@ -14,8 +14,7 @@ class Room extends Model
         'room_type',
         'image',
         'active',
-        'room_capacity',
-        'extra_charges',
+        'room_capacity'
     ];
 
     public function ashram()

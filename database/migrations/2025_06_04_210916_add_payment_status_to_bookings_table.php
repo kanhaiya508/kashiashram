@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('rooms', function (Blueprint $table) {
-            $table->integer('room_capacity')->default(1)->after('room_type');
+        Schema::table('bookings', function (Blueprint $table) {
+            $table->enum('payment_status', ['paid', 'unpaid'])->default('unpaid')->after('status');
         });
     }
 
@@ -21,7 +21,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('rooms', function (Blueprint $table) {
+        Schema::table('bookings', function (Blueprint $table) {
             //
         });
     }

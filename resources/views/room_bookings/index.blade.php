@@ -18,7 +18,7 @@
         <div class="card">
             <div class="card-header">
 
-                <div id="filterForm" class="d-none d-md-block w-100">
+                <div id="filterForm" class="d-none w-100">
 
 
                     <div class="d-flex flex-wrap justify-content-between align-items-center">
@@ -31,7 +31,6 @@
                                 <input type="search" name="search" value="{{ request('search') }}"
                                     class="form-control" placeholder="Search Here...">
                             </div>
-
 
                             <div class="col-md-2  col-6">
                                 <label class="form-label mb-0 small">Status</label>
@@ -129,53 +128,79 @@
                         <div class="col-12 col-md-6 col-lg-4 mb-4">
                             <div class="card shadow-sm h-100">
                                 <div class="card-body d-flex flex-column">
-                                    <h5 class="card-title mb-2">{{ $booking->name }}</h5>
 
-                                    <p class="mb-1">
-                                        <strong>User Type:</strong>
-                                        @if ($booking->user_type == 'Donar')
-                                            <span class="badge bg-success">Donar</span>
-                                        @elseif ($booking->user_type == 'New Yatri')
-                                            <span class="badge bg-primary">New Yatri</span>
-                                        @elseif ($booking->user_type == 'Regular Yatri')
-                                            <span class="badge bg-info">Regular Yatri</span>
-                                        @else
-                                            <span class="badge bg-warning">Unknown</span>
-                                        @endif
-                                    </p>
+                                    <div class="border p-3 mb-2 rounded">
+                                        <h5 class="card-title mb-2">{{ $booking->name }}</h5>
 
-                                    <p class="mb-1"><strong>Phone:</strong> {{ $booking->phone }}</p>
+                                        <p class="mb-1">
+                                            <strong>User Type:</strong>
+                                            @if ($booking->user_type == 'Donar')
+                                                <span class="badge bg-success">Donar</span>
+                                            @elseif ($booking->user_type == 'New Yatri')
+                                                <span class="badge bg-primary">New Yatri</span>
+                                            @elseif ($booking->user_type == 'Regular Yatri')
+                                                <span class="badge bg-info">Regular Yatri</span>
+                                            @else
+                                                <span class="badge bg-warning">Unknown</span>
+                                            @endif
+                                        </p>
 
-                                    <p class="mb-1">
-                                        <strong>Booking Dates:</strong><br>
-                                        {{ \Carbon\Carbon::parse($booking->booking_from)->format('d-m-Y') }}
-                                        → {{ \Carbon\Carbon::parse($booking->booking_to)->format('d-m-Y') }}
-                                    </p>
+                                        <p class="mb-1">
+                                            <strong>Phone:</strong> {{ $booking->phone }}
 
-                                    <p class="mb-1"><strong>Rooms:</strong></p>
-                                    <ul class="ps-3 mb-2">
-                                        @foreach ($booking->rooms as $r)
-                                            <li>{{ $r->room->name ?? '-' }} — ₹{{ $r->amount }}</li>
-                                        @endforeach
-                                    </ul>
+                                            <a href="https://wa.me/{{ preg_replace('/\D/', '', $booking->phone) }}"
+                                                target="_blank" class="btn btn-success btn-sm ms-2"
+                                                title="Open WhatsApp Chat">
+                                                <i class="fab fa-whatsapp"></i> WhatsApp
+                                            </a>
+                                        </p>
+                                    </div>
 
-                                    <p class="mb-1"><strong>Total Amount:</strong>
-                                        ₹{{ $booking->rooms->sum('amount') }}</p>
+                                    <div class="border p-3 mb-2 rounded">
+                                        <p class="mb-1">
+                                            <strong>Booking Dates:</strong><br>
+                                            {{ \Carbon\Carbon::parse($booking->booking_from)->format('d-m-Y') }}
+                                            → {{ \Carbon\Carbon::parse($booking->booking_to)->format('d-m-Y') }}
+                                        </p>
 
-                                    @php
-                                        $status = $booking->status;
-                                        $badgeClass = match ($status) {
-                                            'booked' => 'bg-info text-dark',
-                                            'completed' => 'bg-success',
-                                            'cancelled' => 'bg-danger',
-                                            'applied' => 'bg-warning text-dark',
-                                            default => 'bg-secondary',
-                                        };
-                                    @endphp
-                                    <p class="mb-3">
-                                        <strong>Status:</strong> <span
-                                            class="badge {{ $badgeClass }}">{{ ucfirst($status) }}</span>
-                                    </p>
+                                        <p class="mb-1"><strong>Rooms:</strong></p>
+                                        <ul class="ps-3 mb-2">
+                                            @foreach ($booking->rooms as $r)
+                                                <li>{{ $r->room->name ?? '-' }} — ₹{{ $r->amount }}</li>
+                                            @endforeach
+                                        </ul>
+
+                                        <p class="mb-1"><strong>Extra Charges:</strong>
+                                            ₹{{ $booking->extra_charge ?? 0 }}</p>
+
+                                        <p class="mb-1"><strong>Total Amount:</strong>
+                                            ₹{{ $booking->rooms->sum('amount') + ($booking->extra_charge ?? 0) }}
+                                        </p>
+                                    </div>
+
+                                    <div class="border p-3 mb-2 rounded">
+                                        @php
+                                            $status = $booking->status;
+                                            $badgeClass = match ($status) {
+                                                'booked' => 'bg-info text-dark',
+                                                'completed' => 'bg-success',
+                                                'cancelled' => 'bg-danger',
+                                                'applied' => 'bg-warning text-dark',
+                                                default => 'bg-secondary',
+                                            };
+                                        @endphp
+
+                                        <p class="mb-2"><strong>Status:</strong> <span
+                                                class="badge {{ $badgeClass }}">{{ ucfirst($status) }}</span></p>
+                                        <p><strong>Payment Status:</strong>
+                                            @if ($booking->payment_status === 'paid')
+                                                <span class="badge bg-success">Paid</span>
+                                            @else
+                                                <span class="badge bg-danger">Unpaid</span>
+                                            @endif
+                                        </p>
+                                    </div>
+
 
                                     <div class="mt-auto">
                                         <div class="dropdown">
