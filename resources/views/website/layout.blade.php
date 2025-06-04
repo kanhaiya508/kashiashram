@@ -140,7 +140,7 @@
     <!-- partial:partia/__mobile-nav.html -->
     <aside class="sigma_aside sigma_aside-left">
 
-        <a class="navbar-brand" href="{{route('index')}}"> <img src="{{ asset('website/assets/img/logo_big.png') }}"
+        <a class="navbar-brand" href="https://kashiashram.in/"> <img src="{{ asset('website/assets/img/logo_big.png') }}"
                 alt="logo"> </a>
 
         <!-- Menu -->
@@ -251,7 +251,7 @@
 
                 <!-- Logo Start -->
                 <div class="sigma_logo-wrapper">
-                    <a class="navbar-brand" href="index.html">
+                    <a class="navbar-brand" href="https://kashiashram.in/">
                         <img src="{{ asset('website/assets/img/logo_big.png') }}" alt="logo">
                     </a>
                 </div>
