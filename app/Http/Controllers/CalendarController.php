@@ -39,22 +39,40 @@ class CalendarController extends Controller
                 $start->addDay();
             }
 
-            // Append booked dates to each room
+            $bookingDetailsMap = []; // Holds booking details by room and date
+
+            // Append booked dates + full booking details
             foreach ($rooms as $room) {
                 $bookedDates = [];
+                $bookingDetailsByDate = [];
 
                 foreach ($room->bookings as $booking) {
                     $from = Carbon::parse($booking->booking->booking_from);
                     $to = Carbon::parse($booking->booking->booking_to);
                     $period = $from->copy();
 
-                    while ($period->lte($to)) {
-                        $bookedDates[] = $period->format('Y-m-d');
+                    while ($period->lt($to)) {
+                        $dateStr = $period->format('Y-m-d');
+                        $bookedDates[] = $dateStr;
+
+                        $bookingDetailsByDate[$dateStr] = [
+                            'booking_id' => $booking->booking->id,
+                            'name' => $booking->booking->name,
+                            'phone' => $booking->booking->phone,
+                            'aadhar' => $booking->booking->aadhar,
+                            'status' => $booking->booking->status,
+                            'amount' => $booking->amount,
+                            'room_name' => $room->name,
+                            'room_type' => $room->room_type,
+                            'donation' => $room->donation,
+                        ];
+
                         $period->addDay();
                     }
                 }
 
                 $room->booked_dates = $bookedDates;
+                $room->booking_details_by_date = $bookingDetailsByDate;
             }
 
             return view('calendar.room', compact('ashrams', 'rooms', 'dateRange', 'ashramId', 'startDate', 'endDate'));

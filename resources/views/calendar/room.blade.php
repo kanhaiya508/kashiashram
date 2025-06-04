@@ -80,31 +80,108 @@
                                 Room Name
                             </th>
                             @foreach ($dateRange as $date)
-                                <th   style=" background-color: #5a5e61; color: #fff;" class="text-nowrap">{{ \Carbon\Carbon::parse($date)->format('d M') }}</th>
+                                <th style=" background-color: #5a5e61; color: #fff;" class="text-nowrap">
+                                    {{ \Carbon\Carbon::parse($date)->format('d M') }}</th>
                             @endforeach
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($rooms as $room)
                             <tr>
-                                <!-- Sticky Room Column -->
                                 <td class="fw-bold bg-light text-start" style="position: sticky; left: 0; z-index: 10;">
-                                    {{ $room->name }}
+                                    <strong>Name:</strong> {{ $room->name }} <br> <strong>Type:</strong>
+                                    {{ $room->room_type }}
                                 </td>
 
-                                <!-- Dates -->
                                 @foreach ($dateRange as $date)
                                     @php
                                         $isBooked = in_array($date, $room->booked_dates);
                                     @endphp
-                                    <td class="{{ $isBooked ? 'bg-danger text-white' : 'bg-success text-white' }}">
-                                        {{ $isBooked ? 'Booked' : 'Available' }}
-                                    </td>
+                                    @if ($isBooked)
+                                        <td class="bg-danger text-white" data-bs-toggle="modal"
+                                            data-bs-target="#bookingModal{{ $room->id }}{{ \Carbon\Carbon::parse($date)->format('Ymd') }}">
+                                            Booked
+                                        </td>
+                                    @else
+                                        <td class="bg-success text-white">Available</td>
+                                    @endif
                                 @endforeach
                             </tr>
                         @endforeach
                     </tbody>
                 </table>
+
+                {{-- Modals inside each booked cell --}}
+                @foreach ($rooms as $room)
+                    @foreach ($dateRange as $date)
+                        @php
+                            $isBooked = in_array($date, $room->booked_dates);
+                            $info = $room->booking_details_by_date[$date] ?? null;
+                        @endphp
+
+                        @if ($isBooked && $info)
+                            <div class="modal fade"
+                                id="bookingModal{{ $room->id }}{{ \Carbon\Carbon::parse($date)->format('Ymd') }}"
+                                tabindex="-1" aria-hidden="true">
+                                <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                                    <div class="modal-content">
+                                        <div class="modal-header bg-danger text-white">
+                                            <h5 class="modal-title text-white">Booking Details - {{ $room->name }} on
+                                                {{ \Carbon\Carbon::parse($date)->format('d M Y') }}</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <h6 class="mb-3 text-danger fw-bold">
+                                                Booking ID:
+                                                <a href="{{ route('room-bookings.invoice', $info['booking_id']) }}"
+                                                    class="text-danger text-decoration-underline">
+                                                    {{ $info['booking_id'] }}
+                                                </a>
+                                            </h6>
+
+                                            <div class="row mb-2">
+                                                <div class="col-6"><strong>Name:</strong></div>
+                                                <div class="col-6">{{ $info['name'] }}</div>
+                                            </div>
+                                            <div class="row mb-2">
+                                                <div class="col-6"><strong>Phone:</strong></div>
+                                                <div class="col-6">{{ $info['phone'] }}</div>
+                                            </div>
+                                            <div class="row mb-2">
+                                                <div class="col-6"><strong>Aadhar:</strong></div>
+                                                <div class="col-6">{{ $info['aadhar'] }}</div>
+                                            </div>
+                                            <div class="row mb-2">
+                                                <div class="col-6"><strong>Status:</strong></div>
+                                                <div class="col-6">{{ ucfirst($info['status']) }}</div>
+                                            </div>
+                                            <div class="row mb-2">
+                                                <div class="col-6"><strong>Amount:</strong></div>
+                                                <div class="col-6">₹{{ $info['amount'] }}</div>
+                                            </div>
+                                            <div class="row mb-2">
+                                                <div class="col-6"><strong>Room:</strong></div>
+                                                <div class="col-6">{{ $info['room_name'] }}
+                                                    ({{ $info['room_type'] }})</div>
+                                            </div>
+
+                                            <div class="text-end mt-4">
+                                                <a href="{{ route('room-bookings.invoice', $info['booking_id']) }}"
+                                                    class="btn btn-outline-primary btn-sm" target="_blank" download>
+                                                    <i class="bi bi-download"></i> Download Invoice
+                                                </a>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+                    @endforeach
+                @endforeach
+
+
             </div>
         @endif
 
