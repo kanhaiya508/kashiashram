@@ -243,7 +243,10 @@
             var Toast = Swal.mixin({
                 toast: true,
                 type: "success",
-                position: 'top-end',
+                position: 'bottom-end',
+                background: '#d4edda',
+                color: '#155724',
+                iconColor: '#155724',
                 showConfirmButton: false,
                 timer: 5000
             });
