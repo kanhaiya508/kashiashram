@@ -33,13 +33,23 @@
     </div>
 
     <div class="col-md-6 mb-3">
-        <label class="form-label">Number of Beds</label>
-        <input type="number" name="no_of_beds" class="form-control" required
-            value="{{ old('no_of_beds', $room->no_of_beds ?? '') }}">
-        @error('no_of_beds')
+        <label class="form-label">Room Capacity</label>
+        <input type="number" name="room_capacity" class="form-control" required
+            value="{{ old('room_capacity', $room->room_capacity ?? '') }}">
+        @error('room_capacity')
             <div class="text-danger mt-1">{{ $message }}</div>
         @enderror
     </div>
+
+    <div class="col-md-6 mb-3">
+        <label class="form-label">Extra Charges</label>
+        <input type="number" step="0.01" name="extra_charges" class="form-control"
+            value="{{ old('extra_charges', $room->extra_charges ?? '') }}">
+        @error('extra_charges')
+            <div class="text-danger mt-1">{{ $message }}</div>
+        @enderror
+    </div>
+
 
     <div class="col-md-6 mb-3">
         <label class="form-label">Room Type</label>
