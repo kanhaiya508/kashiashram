@@ -263,7 +263,7 @@
             var Toast = Swal.mixin({
                 toast: true,
                 type: "error",
-                position: 'top-start',
+                position: 'bottom-end',
                 showConfirmButton: false,
                 timer: 5000
             });
