@@ -59,8 +59,9 @@
                                                 <div>
                                                     <label class="me-2 mb-0 fw-semibold">Amount:</label>
                                                     <b class="text-success fs-5">₹{{ number_format($room->donation) }}</b>
-                                                    <input type="hidden" name="amounts[{{ $room->id }}]"
-                                                        value="{{ $room->donation }}">
+                                                    <input type="hidden" class="room-amount-input"
+                                                        name="amounts[{{ $room->id }}]" value="{{ $room->donation }}">
+
                                                 </div>
                                                 <button type="button" class="sigma_btn-custom p-2   btn-toggle-cart"
                                                     data-room-id="{{ $room->id }}" data-action="remove"
@@ -75,6 +76,13 @@
                                 <div class="text-end fw-bold fs-5 mt-4 text-dark">
                                     Estimated Total: <span id="total-amount"
                                         class="text-primary">₹{{ number_format($total) }}</span>
+
+                                </div>
+                                <div class="text-end small text-muted">
+                                    Total Room Capacity: <span id="room-capacity-count">0</span><br>
+                                    Total People: <span id="total-people-count">0</span><br>
+                                    Extra People: <span id="extra-person-count">0</span><br>
+                                    Extra Charges (₹299 per person): ₹<span id="extra-charge-amount">0</span>
                                 </div>
                             </div>
                         </div>
@@ -134,7 +142,8 @@
                                     </div>
                                     <div class="col-md-6">
                                         <label for="phone" class="form-label">Phone Number</label>
-                                        <input type="text" id="phone" name="phone" class="form-control" required>
+                                        <input type="text" id="phone" name="phone" class="form-control"
+                                            required>
                                     </div>
                                     <div class="col-md-3">
                                         <label for="user_type" class="form-label">User Type</label>
@@ -250,6 +259,69 @@
                         });
                 });
             });
+        });
+    </script>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const inputs = document.querySelectorAll('.room-amount-input');
+            const totalDisplay = document.getElementById('total-amount');
+            const adultsSelect = document.querySelector('[name="adults"]');
+            const childrenSelect = document.querySelector('[name="children"]');
+
+            const capacityCount = document.getElementById('room-capacity-count');
+            const totalPeopleCount = document.getElementById('total-people-count');
+            const extraPersonCount = document.getElementById('extra-person-count');
+            const extraChargeAmount = document.getElementById('extra-charge-amount');
+
+            function getTotalRoomCapacity() {
+                let totalCapacity = 0;
+                @foreach ($rooms as $room)
+                    totalCapacity += {{ $room->room_capacity }};
+                @endforeach
+                return totalCapacity;
+            }
+
+            function updateTotal() {
+                let total = 0;
+                inputs.forEach(input => {
+                    const value = parseFloat(input.value);
+                    if (!isNaN(value)) {
+                        total += value;
+                    }
+                });
+
+                const adults = parseInt(adultsSelect.value) || 0;
+                const children = parseInt(childrenSelect.value) || 0;
+                const totalPeople = adults + children;
+
+                const roomCapacity = getTotalRoomCapacity();
+
+                // Update counts
+                capacityCount.textContent = roomCapacity;
+                totalPeopleCount.textContent = totalPeople;
+
+                let extraPeople = 0;
+                let extraCharge = 0;
+                if (totalPeople > roomCapacity) {
+                    extraPeople = totalPeople - roomCapacity;
+                    extraCharge = extraPeople * 299;
+                }
+
+                extraPersonCount.textContent = extraPeople;
+                extraChargeAmount.textContent = extraCharge;
+
+                total += extraCharge;
+                totalDisplay.textContent = total.toFixed(2);
+            }
+
+            // Event listeners
+            inputs.forEach(input => input.addEventListener('input', updateTotal));
+            adultsSelect.addEventListener('change', updateTotal);
+            childrenSelect.addEventListener('change', updateTotal);
+
+            updateTotal(); // Initial call
         });
     </script>
 

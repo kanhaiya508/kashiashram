@@ -117,6 +117,21 @@ class IndexController extends Controller
         try {
             Log::info('Creating booking...');
 
+            $totalPeople = intval($request->adults) + intval($request->children);
+
+            // Get room capacities
+            $rooms = Room::whereIn('id', $roomIds)->get();
+            $totalRoomCapacity = $rooms->sum('room_capacity');
+
+            // Calculate extra people
+            $extraPersons = max(0, $totalPeople - $totalRoomCapacity);
+            $extraCharge = $extraPersons * 299;
+
+            // Total room amount
+            $roomTotal = collect($request->amounts)->sum();
+            $finalTotal = $roomTotal + $extraCharge;
+
+
             $booking = Booking::create([
                 'name' => $request->name,
                 'phone' => $request->phone,
@@ -132,6 +147,8 @@ class IndexController extends Controller
                 'travel_type' => $request->travel_type,
                 'booking_from' => $bookingFrom,
                 'booking_to' => $bookingTo,
+                'extra_charge' => $extraCharge,
+
                 'status' => 'applied',
             ]);
 

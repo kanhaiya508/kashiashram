@@ -17,7 +17,7 @@
 
         <div class="card">
             <div class="card-header">
-                <div id="filterForm" class="d-none d-md-block w-100">
+                <div id="filterForm" class="d-none  w-100">
 
                     <div class="d-flex flex-wrap justify-content-between align-items-center">
 
@@ -116,88 +116,87 @@
                         <div class="col-12 col-md-6 col-lg-4 mb-4">
                             <div class="card shadow-sm h-100">
                                 <div class="card-body d-flex flex-column">
-                                    <h5 class="card-title mb-2">{{ $booking->name }}</h5>
 
-                                    <p class="mb-1"><strong>Phone:</strong> {{ $booking->phone }}</p>
+                                    <div class="border p-3 mb-2 rounded">
+                                        <h5 class="card-title mb-2">{{ $booking->name }}</h5>
 
-                                    <p class="mb-1">
-                                        <strong>Booking Dates:</strong><br>
-                                        {{ \Carbon\Carbon::parse($booking->booking_from)->format('d-m-Y') }}
-                                        → {{ \Carbon\Carbon::parse($booking->booking_to)->format('d-m-Y') }}
-                                    </p>
+                                        <p class="mb-1">
+                                            <strong>User Type:</strong>
+                                            @if ($booking->user_type == 'Donar')
+                                                <span class="badge bg-success">Donar</span>
+                                            @elseif ($booking->user_type == 'New Yatri')
+                                                <span class="badge bg-primary">New Yatri</span>
+                                            @elseif ($booking->user_type == 'Regular Yatri')
+                                                <span class="badge bg-info">Regular Yatri</span>
+                                            @else
+                                                <span class="badge bg-warning">Unknown</span>
+                                            @endif
+                                        </p>
 
-                                    <p class="mb-1"><strong>Rooms:</strong></p>
-                                    <ul class="ps-3 mb-2">
-                                        @foreach ($booking->rooms as $r)
-                                            <li>{{ $r->room->name ?? '-' }} — ₹{{ $r->amount }}</li>
-                                        @endforeach
-                                    </ul>
+                                        <p class="mb-1">
+                                            <strong>Phone:</strong> {{ $booking->phone }}
 
-                                    <p class="mb-1"><strong>Total Amount:</strong>
-                                        ₹{{ $booking->rooms->sum('amount') }}</p>
+                                            <a href="https://wa.me/{{ preg_replace('/\D/', '', $booking->phone) }}"
+                                                target="_blank" class="btn btn-success btn-sm ms-2"
+                                                title="Open WhatsApp Chat">
+                                                <i class="fab fa-whatsapp"></i> WhatsApp
+                                            </a>
+                                        </p>
+                                    </div>
 
-                                    @php
-                                        $status = $booking->status;
-                                        $badgeClass = match ($status) {
-                                            'booked' => 'bg-info text-dark',
-                                            'completed' => 'bg-success',
-                                            'cancelled' => 'bg-danger',
-                                            'applied' => 'bg-warning text-dark',
-                                            default => 'bg-secondary',
-                                        };
-                                    @endphp
-                                    <p class="mb-3">
-                                        <strong>Status:</strong> <span
-                                            class="badge {{ $badgeClass }}">{{ ucfirst($status) }}</span>
-                                    </p>
+                                    <div class="border p-3 mb-2 rounded">
+                                        <p class="mb-1">
+                                            <strong>Booking Dates:</strong><br>
+                                            {{ \Carbon\Carbon::parse($booking->booking_from)->format('d-m-Y') }}
+                                            → {{ \Carbon\Carbon::parse($booking->booking_to)->format('d-m-Y') }}
+                                        </p>
+
+                                        <p class="mb-1"><strong>Rooms:</strong></p>
+                                        <ul class="ps-3 mb-2">
+                                            @foreach ($booking->rooms as $r)
+                                                <li>{{ $r->room->name ?? '-' }} — ₹{{ $r->amount }}</li>
+                                            @endforeach
+                                        </ul>
+
+                                        <p class="mb-1"><strong>Extra Charges:</strong>
+                                            ₹{{ $booking->extra_charge ?? 0 }}</p>
+
+                                        <p class="mb-1"><strong>Total Amount:</strong>
+                                            ₹{{ $booking->rooms->sum('amount') + ($booking->extra_charge ?? 0) }}
+                                        </p>
+                                    </div>
+
+                                    <div class="border p-3 mb-2 rounded">
+                                        @php
+                                            $status = $booking->status;
+                                            $badgeClass = match ($status) {
+                                                'booked' => 'bg-info text-dark',
+                                                'completed' => 'bg-success',
+                                                'cancelled' => 'bg-danger',
+                                                'applied' => 'bg-warning text-dark',
+                                                default => 'bg-secondary',
+                                            };
+                                        @endphp
+
+                                        <p class="mb-2"><strong>Status:</strong> <span
+                                                class="badge {{ $badgeClass }}">{{ ucfirst($status) }}</span></p>
+                                        <p><strong>Payment Status:</strong>
+                                            @if ($booking->payment_status === 'paid')
+                                                <span class="badge bg-success">Paid</span>
+                                            @else
+                                                <span class="badge bg-danger">Unpaid</span>
+                                            @endif
+                                        </p>
+                                    </div>
+
 
                                     <div class="mt-auto">
                                         <div class="dropdown">
-                                            <button class="btn btn-outline-secondary btn-sm dropdown-toggle w-100"
-                                                type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <button class="btn btn-secondary btn-sm w-100 dropdown-toggle" type="button"
+                                                data-bs-toggle="dropdown" aria-expanded="false">
                                                 Actions
                                             </button>
-                                            <ul class="dropdown-menu w-100">
-
-                                                <li>
-                                                    <button class="dropdown-item status-change"
-                                                        data-url="{{ route('room-bookings.status.update', ['id' => $booking->id, 'status' => 'applied']) }}"
-                                                        data-action="Mark this booking as applied?">
-                                                        <i class="fas fa-hourglass-start me-1 text-warning"></i>
-                                                        Mark as
-                                                        Applied
-                                                    </button>
-                                                </li>
-                                                <li>
-                                                    <button class="dropdown-item status-change"
-                                                        data-url="{{ route('room-bookings.status.update', ['id' => $booking->id, 'status' => 'cancelled']) }}"
-                                                        data-action="Cancel this booking?">
-                                                        <i class="fas fa-times-circle me-1 text-danger"></i> Cancel
-                                                    </button>
-                                                </li>
-                                                <li>
-                                                    <button class="dropdown-item status-change"
-                                                        data-url="{{ route('room-bookings.status.update', ['id' => $booking->id, 'status' => 'booked']) }}"
-                                                        data-action="Mark this booking as booked?">
-                                                        <i class="fas fa-book me-1 text-primary"></i> Mark as
-                                                        Booked
-                                                    </button>
-                                                </li>
-                                                <li>
-                                                    <button class="dropdown-item status-change"
-                                                        data-url="{{ route('room-bookings.status.update', ['id' => $booking->id, 'status' => 'completed']) }}"
-                                                        data-action="Mark this booking as completed?">
-                                                        <i class="fas fa-check-circle me-1 text-success"></i>
-                                                        Complete
-                                                    </button>
-                                                </li>
-                                                <li>
-                                                    <a href="{{ route('room-bookings.invoice', $booking->id) }}"
-                                                        class="dropdown-item">
-                                                        <i class="fas fa-file-pdf me-1 text-secondary"></i> Invoice
-                                                    </a>
-                                                </li>
-
+                                            <ul class="dropdown-menu">
                                                 <li><a class="dropdown-item"
                                                         href="{{ route('room-bookings.edit', $booking->id) }}">
                                                         <i class="fas fa-edit me-1"></i> Edit</a>
@@ -214,6 +213,36 @@
                                                         </button>
                                                     </form>
                                                 </li>
+
+                                                <li><button class="dropdown-item status-change"
+                                                        data-url="{{ route('room-bookings.status.update', ['id' => $booking->id, 'status' => 'applied']) }}"
+                                                        data-action="Mark this booking as applied?">
+                                                        <i class="fas fa-hourglass-start me-1 text-warning"></i> Mark
+                                                        as Applied
+                                                    </button></li>
+
+                                                <li><button class="dropdown-item status-change"
+                                                        data-url="{{ route('room-bookings.status.update', ['id' => $booking->id, 'status' => 'cancelled']) }}"
+                                                        data-action="Cancel this booking?">
+                                                        <i class="fas fa-times-circle me-1 text-danger"></i> Cancel
+                                                    </button></li>
+
+                                                <li><button class="dropdown-item status-change"
+                                                        data-url="{{ route('room-bookings.status.update', ['id' => $booking->id, 'status' => 'booked']) }}"
+                                                        data-action="Mark this booking as booked?">
+                                                        <i class="fas fa-book me-1 text-primary"></i> Mark as Booked
+                                                    </button></li>
+
+                                                <li><button class="dropdown-item status-change"
+                                                        data-url="{{ route('room-bookings.status.update', ['id' => $booking->id, 'status' => 'completed']) }}"
+                                                        data-action="Mark this booking as completed?">
+                                                        <i class="fas fa-check-circle me-1 text-success"></i> Complete
+                                                    </button></li>
+
+                                                <li><a class="dropdown-item"
+                                                        href="{{ route('room-bookings.invoice', $booking->id) }}">
+                                                        <i class="fas fa-file-pdf me-1 text-secondary"></i> Invoice
+                                                    </a></li>
                                             </ul>
                                         </div>
                                     </div>

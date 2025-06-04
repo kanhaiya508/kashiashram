@@ -87,11 +87,12 @@
             <th>Check-out Date</th>
             <td>{{ $booking->booking_to->format('d-m-Y') }}</td>
         </tr>
-
         @php
             $roomTotal = $booking->rooms->sum('amount');
             $extraCharge = $booking->extra_charge ?? 0;
             $finalTotal = $roomTotal + $extraCharge;
+            $isPaid = $booking->payment_status === 'paid';
+            $paidAmount = $booking->paid_amount ?? 0; // agar paid amount stored hai to use karo
         @endphp
 
         <tr>
@@ -110,12 +111,13 @@
         </tr>
         <tr>
             <th>Paying Amount</th>
-            <td>₹0.00</td> {{-- You can replace this with actual payment amount if available --}}
+            <td>₹{{ number_format($isPaid ? $finalTotal : 0, 2) }}</td>
         </tr>
         <tr>
             <th>Remaining Balance</th>
-            <td>₹{{ number_format($finalTotal, 2) }}</td> {{-- Adjust if payment is applied --}}
+            <td>₹{{ number_format($isPaid ? 0 : $finalTotal, 2) }}</td>
         </tr>
+
 
         <tr>
             <th>No. of People</th>
