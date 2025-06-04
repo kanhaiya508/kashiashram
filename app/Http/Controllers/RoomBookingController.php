@@ -185,6 +185,10 @@ class RoomBookingController extends Controller
     public function confirm()
     {
         $roomIds = session('selected_rooms', []);
+
+        if (empty($roomIds)) {
+            return redirect()->back()->with('error', 'PLease select at least one room.');
+        }
         $rooms = Room::whereIn('id', $roomIds)->get();
         $booking_from = session('booking_from');
         $booking_to = session('booking_to');

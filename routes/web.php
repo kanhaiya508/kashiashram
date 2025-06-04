@@ -14,6 +14,14 @@ use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [IndexController::class, 'index'])->name('index');
+
+Route::get('/room-bookings/session-check', function () {
+    return response()->json([
+        'has_selected_rooms' => session()->has('selected_rooms') && count(session('selected_rooms')) > 0
+    ]);
+})->name('room-bookings.session-check');
+
+
 Route::get('web/room-bookings', [IndexController::class, 'roombookings'])->name('web.room-bookings');
 Route::get('web/room-bookings/confirm', [IndexController::class, 'confirm'])->name('web.room-bookings.confirm');
 Route::post('web/room-bookings/confirm', [IndexController::class, 'storeFinal'])->name('web.room-bookings.confirm.store');

@@ -75,8 +75,8 @@
                             <span></span>
                             <span></span>
                         </div>
-                        <img src="{{ asset('website/assets/img/about-group1/2.jpg') }}" alt="about">
-                        <img src="{{ asset('website/assets/img/about-group1/3.jpg') }}" alt="about">
+                        <img src="{{ asset('website/assets/img/about-group1/2.png') }}" alt="about">
+                        <img src="{{ asset('website/assets/img/about-group1/1.png') }}" alt="about">
                     </div>
                 </div>
                 <div class="col-lg-6">
