@@ -22,81 +22,64 @@
 
             </div>
             <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-bordered table-hover align-middle">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Image</th>
-                                <th>Ashram</th>
-                                <th>Name</th>
-                                <th>Type</th>
-                                <th>Beds</th>
-                                <th>Donation</th>
-                                <th>Active</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($rooms as $room)
-                                <tr>
-                                    <td>{{ $loop->iteration }}</td>
+                <div class="row">
+                    @forelse ($rooms as $room)
+                        <div class="col-md-6 col-lg-4 mb-4">
+                            <div class="card h-100 shadow-sm">
+                                @if (!empty($room->image))
+                                    <img src="{{ asset($room->image) }}" class="card-img-top" alt="Room Image"
+                                        style="height: 180px; object-fit: cover;">
+                                @else
+                                    <div class="card-img-top bg-light d-flex justify-content-center align-items-center"
+                                        style="height: 180px;">
+                                        <span class="text-muted">No Image</span>
+                                    </div>
+                                @endif
 
-                                    <td>
-                                        @if (!empty($room->image))
-                                            <a target="_blank" href="{{ asset($room->image) }}"> <img
-                                                    src="{{ asset($room->image) }}" alt="Room Image"
-                                                    style="width: 80px; height: auto;"></a>
-                                        @else
-                                            <span class="text-muted">No Image</span>
-                                        @endif
-                                    </td>
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ $room->name }}</h5>
+                                    <p class="mb-1"><strong>Ashram:</strong> {{ $room->ashram->name ?? '-' }}</p>
+                                    <p class="mb-1"><strong>Type:</strong> {{ $room->room_type }}</p>
+                                    <p class="mb-1"><strong>Beds:</strong> {{ $room->no_of_beds }}</p>
+                                    <p class="mb-1"><strong>Capacity:</strong> {{ $room->room_capacity }} persons</p>
+                                    <p class="mb-1"><strong>Donation:</strong> ₹{{ $room->donation }}</p>
+                                    <p class="mb-1"><strong>Extra Charges:</strong>
+                                        ₹{{ number_format($room->extra_charges, 2) }}</p>
+                                    <p class="mb-1"><strong>Active:</strong> {{ $room->active ? 'Yes' : 'No' }}</p>
+                                </div>
 
-                                    <td>{{ $room->ashram->name ?? '-' }}</td>
-                                    <td>{{ $room->name }}</td>
-                                    <td>{{ $room->room_type }}</td>
-                                    <td>{{ $room->no_of_beds }}</td>
-                                    <td>₹{{ $room->donation }}</td>
-                                    <td>{{ $room->active ? 'Yes' : 'No' }}</td>
-                                    <td>
-                                        <div class="dropdown">
-                                            <button class="btn p-0 dropdown-toggle hide-arrow"
-                                                data-bs-toggle="dropdown">
-                                                <i class="bx bx-dots-vertical-rounded"></i>
-                                            </button>
-                                            <div class="dropdown-menu">
-                                                @can('room-edit')
-                                                    <a class="dropdown-item" href="{{ route('rooms.edit', $room->id) }}">
-                                                        <i class="bx bx-edit-alt me-1"></i> Edit
-                                                    </a>
-                                                @endcan
-                                                @can('room-delete')
-                                                    <form method="POST" action="{{ route('rooms.destroy', $room->id) }}"
-                                                        class="delete-form">
-                                                        @csrf @method('DELETE')
-                                                        <button type="button" class="dropdown-item delete-button">
-                                                            <i class="bx bx-trash me-1"></i> Delete
-                                                        </button>
-                                                    </form>
-                                                @endcan
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-
-                    <div class="d-flex justify-content-between align-items-center mt-3 flex-wrap">
-
-                        <div>
-                            {{ $rooms->links() }}
+                                <div class="card-footer bg-transparent border-top-0">
+                                    <div class="d-flex justify-content-between">
+                                        @can('room-edit')
+                                            <a href="{{ route('rooms.edit', $room->id) }}" class="btn btn-sm btn-primary">
+                                                <i class="bx bx-edit-alt"></i> Edit
+                                            </a>
+                                        @endcan
+                                        @can('room-delete')
+                                            <form method="POST" action="{{ route('rooms.destroy', $room->id) }}"
+                                                class="delete-form d-inline">
+                                                @csrf @method('DELETE')
+                                                <button type="submit" class="btn btn-sm btn-danger">
+                                                    <i class="bx bx-trash"></i> Delete
+                                                </button>
+                                            </form>
+                                        @endcan
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
+                    @empty
+                        <div class="col-12">
+                            <div class="alert alert-info">No rooms available.</div>
+                        </div>
+                    @endforelse
+                </div>
 
-
+                <div class="d-flex justify-content-center mt-3">
+                    {{ $rooms->links() }}
                 </div>
             </div>
+
         </div>
     </div>
 </x-app-layout>

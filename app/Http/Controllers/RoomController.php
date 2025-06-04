@@ -49,6 +49,8 @@ class RoomController extends Controller implements HasMiddleware
             'donation' => 'required|numeric',
             'no_of_beds' => 'required|integer',
             'room_type' => 'required|in:AC,Non-AC',
+            'room_capacity' => 'required|integer|min:1',
+            'extra_charges' => 'nullable|numeric|min:0',
             'image' => 'nullable|image',
         ]);
 
@@ -58,8 +60,11 @@ class RoomController extends Controller implements HasMiddleware
             'donation',
             'no_of_beds',
             'room_type',
+            'room_capacity',
+            'extra_charges',
             'active'
         ]);
+
 
         if ($request->hasFile('image')) {
             $filename = time() . '.' . $request->image->extension();
@@ -86,6 +91,8 @@ class RoomController extends Controller implements HasMiddleware
             'donation' => 'required|numeric',
             'no_of_beds' => 'required|integer',
             'room_type' => 'required|in:AC,Non-AC',
+            'room_capacity' => 'required|integer|min:1',
+            'extra_charges' => 'nullable|numeric|min:0',
             'image' => 'nullable|image',
         ]);
 
@@ -95,8 +102,11 @@ class RoomController extends Controller implements HasMiddleware
             'donation',
             'no_of_beds',
             'room_type',
+            'room_capacity',
+            'extra_charges',
             'active'
         ]);
+
 
         if ($request->hasFile('image')) {
             $filename = time() . '.' . $request->image->extension();
