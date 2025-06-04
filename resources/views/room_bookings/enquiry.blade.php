@@ -158,6 +158,7 @@
                                                 Actions
                                             </button>
                                             <ul class="dropdown-menu w-100">
+
                                                 <li>
                                                     <button class="dropdown-item status-change"
                                                         data-url="{{ route('room-bookings.status.update', ['id' => $booking->id, 'status' => 'applied']) }}"
@@ -195,6 +196,23 @@
                                                         class="dropdown-item">
                                                         <i class="fas fa-file-pdf me-1 text-secondary"></i> Invoice
                                                     </a>
+                                                </li>
+
+                                                <li><a class="dropdown-item"
+                                                        href="{{ route('room-bookings.edit', $booking->id) }}">
+                                                        <i class="fas fa-edit me-1"></i> Edit</a>
+                                                </li>
+
+                                                <li>
+                                                    <form method="POST"
+                                                        action="{{ route('room-bookings.destroy', $booking->id) }}"
+                                                        class="delete-form m-0 p-0">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="button" class="dropdown-item delete-button">
+                                                            <i class="bx bx-trash me-1"></i> Delete
+                                                        </button>
+                                                    </form>
                                                 </li>
                                             </ul>
                                         </div>
