@@ -204,7 +204,7 @@
 
                                     <div class="mt-auto">
                                         <div class="dropdown">
-                                            <button class="btn btn-secondary btn-sm dropdown-toggle" type="button"
+                                            <button class="btn btn-secondary w-100 btn-sm dropdown-toggle" type="button"
                                                 data-bs-toggle="dropdown" aria-expanded="false">
                                                 Actions
                                             </button>
