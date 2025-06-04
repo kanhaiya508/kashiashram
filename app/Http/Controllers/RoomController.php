@@ -30,7 +30,7 @@ class RoomController extends Controller implements HasMiddleware
             $query->where('name', 'like', '%' . $request->search . '%');
         }
 
-        $rooms = $query->latest()->paginate(10)->withQueryString(); // withQueryString maintains search during pagination
+        $rooms = $query->latest()->paginate(15)->withQueryString(); // withQueryString maintains search during pagination
 
         return view('rooms.index', compact('rooms'));
     }

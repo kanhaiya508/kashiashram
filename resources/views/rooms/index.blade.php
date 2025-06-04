@@ -59,7 +59,7 @@
                                             <form method="POST" action="{{ route('rooms.destroy', $room->id) }}"
                                                 class="delete-form d-inline">
                                                 @csrf @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-danger">
+                                                <button type="button" class="btn btn-sm btn-danger delete-confirm">
                                                     <i class="bx bx-trash"></i> Delete
                                                 </button>
                                             </form>
@@ -82,4 +82,30 @@
 
         </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const deleteButtons = document.querySelectorAll('.delete-confirm');
+
+            deleteButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    const form = this.closest('form');
+
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: "This action cannot be undone!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#3085d6',
+                        confirmButtonText: 'Yes, delete it!'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            form.submit();
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+
 </x-app-layout>
