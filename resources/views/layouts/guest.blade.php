@@ -49,7 +49,7 @@
     </div>
 
 
-
+.
     <!-- Core JS -->
     <!-- build:js assets/vendor/js/core.js -->
     <script src="{{ asset('assets/vendor/libs/jquery/jquery.js') }}"></script>
