@@ -193,8 +193,8 @@ class RoomBookingController extends Controller
         $rooms = Room::whereIn('id', $roomIds)->get();
         $booking_from = session('booking_from');
         $booking_to = session('booking_to');
-
-        return view('room_bookings.confirm', compact('rooms', 'booking_from', 'booking_to'));
+        $room_capacity = $rooms->sum('room_capacity');
+        return view('room_bookings.confirm', compact('rooms', 'booking_from', 'booking_to', 'room_capacity'));
     }
 
 
@@ -220,21 +220,13 @@ class RoomBookingController extends Controller
             'user_type' => 'nullable|string',
             'travel_type' => 'nullable|string',
             'amounts' => 'required|array',
+            'paid_amount' => 'required',
         ]);
 
         DB::beginTransaction();
 
         try {
-            // Step 1: Calculate total room capacity
-            $rooms = Room::whereIn('id', $roomIds)->get();
-            $totalCapacity = $rooms->sum('room_capacity');
 
-            // Step 2: Total People
-            $totalPeople = ($request->adults ?? 0) + ($request->children ?? 0);
-
-            // Step 3: Extra person charge
-            $extraPeople = max(0, $totalPeople - $totalCapacity);
-            $extraCharge = $extraPeople * 299;
 
             // Step 4: Create master booking
             $booking = Booking::create([
@@ -252,8 +244,9 @@ class RoomBookingController extends Controller
                 'children' => $request->children,
                 'status' => $request->status,
                 'payment_status' => $request->payment_status,
-                'extra_charge' => $extraCharge, // Optional: Add this column to `bookings` table
+                'paid_amount' => $request->paid_amount,
             ]);
+
 
             // Step 5: Save room-wise bookings
             foreach ($roomIds as $roomId) {
@@ -269,12 +262,14 @@ class RoomBookingController extends Controller
 
             session()->forget(['selected_rooms', 'booking_from', 'booking_to']);
 
-            return redirect()->route('room-bookings.index')->with('success', 'Booking confirmed successfully. Extra charges (if any): ₹' . $extraCharge);
+            return redirect()->route('room-bookings.index')->with('success', 'Booking confirmed successfully.');
         } catch (\Exception $e) {
             DB::rollBack();
             return back()->with('error', 'Something went wrong: ' . $e->getMessage());
         }
     }
+
+
     public function status_update($id, $status)
     {
         $booking = Booking::findOrFail($id);

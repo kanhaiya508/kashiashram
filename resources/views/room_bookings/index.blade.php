@@ -170,9 +170,6 @@
                                             @endforeach
                                         </ul>
 
-                                        <p class="mb-1"><strong>Extra Charges:</strong>
-                                            ₹{{ $booking->extra_charge ?? 0 }}</p>
-
                                         <p class="mb-1"><strong>Total Amount:</strong>
                                             ₹{{ $booking->rooms->sum('amount') + ($booking->extra_charge ?? 0) }}
                                         </p>

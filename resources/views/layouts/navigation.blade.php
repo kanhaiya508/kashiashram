@@ -11,114 +11,72 @@
     <div class="menu-inner-shadow"></div>
 
     <ul class="menu-inner py-1">
-        <!-- Dashboard -->
-        <li class="menu-item">
-            <a href="{{ route('dashboard') }}" class="menu-link">
+     <!-- Dashboard -->
+<li class="menu-item">
+    <a href="{{ route('dashboard') }}" class="menu-link">
+        <i class="menu-icon tf-icons bx bx-home-circle"></i>
+        <div data-i18n="Analytics">Dashboard</div>
+    </a>
+</li>
 
-                <i class="menu-icon tf-icons bx bx-home-circle"></i>
-                <div data-i18n="Analytics">Dashboard</div>
-            </a>
-        </li>
+<!-- Room Calendar -->
+<li class="menu-item {{ request()->routeIs('room-calendar') ? 'active' : '' }}">
+    <a href="{{ route('room-calendar') }}" class="menu-link">
+        <i class="menu-icon fas fa-clock"></i>
+        <span class="menu-text">Room Calendar</span>
+    </a>
+</li>
 
+<!-- Donor Calendar -->
+<li class="menu-item {{ request()->routeIs('donor-calendar') ? 'active' : '' }}">
+    <a href="{{ route('donor-calendar') }}" class="menu-link">
+        <i class="menu-icon fas fa-hand-holding-heart"></i>
+        <span class="menu-text">Donor Calendar</span>
+    </a>
+</li>
 
+<!-- Booking Enquiry -->
+<li class="menu-item {{ request()->routeIs('room-bookings.enquiry') ? 'active' : '' }}">
+    <a href="{{ route('room-bookings.enquiry') }}" class="menu-link">
+        <i class="menu-icon fas fa-question-circle"></i>
+        <span class="menu-text">Booking Enquiry</span>
+    </a>
+</li>
 
-        <li class="menu-item {{ request()->routeIs('room-calendar') ? 'active' : '' }}">
-            <a href="{{ route('room-calendar') }}" class="menu-link">
-                <i class="menu-icon fas fa-clock"></i>
-                <span class="menu-text">Room Calendar</span>
-            </a>
-        </li>
+<!-- New Booking -->
+<li class="menu-item {{ request()->routeIs('room-bookings.available') ? 'active' : '' }}">
+    <a href="{{ route('room-bookings.available') }}" class="menu-link">
+        <i class="menu-icon fas fa-plus-square"></i>
+        <span class="menu-text">New Booking</span>
+    </a>
+</li>
 
-        <li class="menu-item {{ request()->routeIs('donor-calendar') ? 'active' : '' }}">
-            <a href="{{ route('donor-calendar') }}" class="menu-link">
-                <i class="menu-icon fas fa-hand-holding-heart"></i>
-                <span class="menu-text">Donor Calendar</span>
-            </a>
-        </li>
+<!-- Booking List -->
+<li class="menu-item {{ request()->routeIs('room-bookings.index') ? 'active' : '' }}">
+    <a href="{{ route('room-bookings.index') }}" class="menu-link">
+        <i class="menu-icon fas fa-list"></i>
+        <span class="menu-text">Booking List</span>
+    </a>
+</li>
 
+@can('room-list')
+    <li class="menu-item {{ request()->routeIs('rooms.*') ? 'active' : '' }}">
+        <a href="{{ route('rooms.index') }}" class="menu-link">
+            <i class="menu-icon fas fa-bed"></i>
+            <span class="menu-text">Rooms</span>
+        </a>
+    </li>
+@endcan
 
+@can('ashram-list')
+    <li class="menu-item {{ request()->routeIs('ashrams.*') ? 'active' : '' }}">
+        <a href="{{ route('ashrams.index') }}" class="menu-link">
+            <i class="menu-icon fas fa-church"></i>
+            <span class="menu-text">Ashrams</span>
+        </a>
+    </li>
+@endcan
 
-        <li class="menu-item {{ request()->routeIs('room-bookings.*') ? 'active open' : '' }}">
-            <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon fas fa-calendar-check"></i>
-                <div data-i18n="Room Booking">Room Bookings</div>
-            </a>
-            <ul class="menu-sub">
-                <li class="menu-item {{ request()->routeIs('room-bookings.available') ? 'active' : '' }}">
-                    <a href="{{ route('room-bookings.available') }}" class="menu-link">New Booking</a>
-                </li>
-
-                <li class="menu-item {{ request()->routeIs('room-bookings.enquiry') ? 'active' : '' }}">
-                    <a href="{{ route('room-bookings.enquiry') }}" class="menu-link">Booking Enquiry</a>
-                </li>
-
-
-                <li class="menu-item {{ request()->routeIs('room-bookings.index') ? 'active' : '' }}">
-                    <a href="{{ route('room-bookings.index') }}" class="menu-link">Booking List</a>
-                </li>
-
-            </ul>
-        </li>
-
-
-
-        @can('room-list')
-            <li class="menu-item {{ request()->routeIs('rooms.*') ? 'active' : '' }}">
-                <a href="{{ route('rooms.index') }}" class="menu-link">
-                    <i class="menu-icon fas fa-bed"></i>
-                    <span class="menu-text">Rooms</span>
-                </a>
-            </li>
-        @endcan
-
-
-        @can('ashram-list')
-            <li class="menu-item {{ request()->routeIs('ashrams.*') ? 'active' : '' }}">
-                <a href="{{ route('ashrams.index') }}" class="menu-link">
-                    <i class="menu-icon fas fa-church"></i> <!-- You can replace with another appropriate icon -->
-                    <span class="menu-text">Ashrams</span>
-                </a>
-            </li>
-        @endcan
-
-
-        @canany(['financialyears-list', 'services-list', 'locations-list'])
-            <!-- System settings  -->
-            <li class="menu-item">
-                <a href="javascript:void(0);" class="menu-link menu-toggle">
-                    <i class="menu-icon tf-icons bx bx-cog"></i>
-                    <div data-i18n="Layouts">System Settings </div>
-                </a>
-                <ul class="menu-sub">
-
-                    @can('financialyears-list')
-                        <li class="menu-item {{ request()->routeIs('financialyears.*') ? 'active' : '' }}">
-                            <a href="{{ route('financialyears.index') }}" class="menu-link">
-                                <div data-i18n="Without menu">Financial Year </div>
-                            </a>
-                        </li>
-                    @endcan
-
-
-                    @can('services-list')
-                        <li class="menu-item {{ request()->routeIs('services.*') ? 'active' : '' }}">
-                            <a href="{{ route('services.index') }}" class="menu-link">
-                                <div data-i18n="Without menu">Services </div>
-                            </a>
-                        </li>
-                    @endcan
-                    @can('locations-list')
-                        <li class="menu-item {{ request()->routeIs('locations.*') ? 'active' : '' }}">
-                            <a href="{{ route('locations.index') }}" class="menu-link">
-                                <div data-i18n="Without menu">locations </div>
-                            </a>
-                        </li>
-                    @endcan
-
-
-                </ul>
-            </li>
-        @endcanany
 
         <!-- User Info -->
 

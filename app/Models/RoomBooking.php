@@ -10,6 +10,7 @@ class RoomBooking extends Model
         'booking_id',
         'room_id',
         'amount',
+
     ];
 
     public function room()

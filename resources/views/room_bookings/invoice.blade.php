@@ -99,23 +99,18 @@
             <th>Room Total</th>
             <td>₹{{ number_format($roomTotal, 2) }}</td>
         </tr>
-        @if ($extraCharge > 0)
-            <tr>
-                <th>Extra Charges<br><small class="text-muted">(Additional persons)</small></th>
-                <td>₹{{ number_format($extraCharge, 2) }}</td>
-            </tr>
-        @endif
+
         <tr class="table-primary fw-bold">
             <th>Final Total Amount</th>
             <td>₹{{ number_format($finalTotal, 2) }}</td>
         </tr>
         <tr>
             <th>Paying Amount</th>
-            <td>₹{{ number_format($isPaid ? $finalTotal : 0, 2) }}</td>
+            <td>₹{{ number_format($paidAmount, 2) }}</td>
         </tr>
         <tr>
             <th>Remaining Balance</th>
-            <td>₹{{ number_format($isPaid ? 0 : $finalTotal, 2) }}</td>
+            <td>₹{{ number_format( $finalTotal - $paidAmount , 2) }}</td>
         </tr>
 
 

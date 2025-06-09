@@ -23,7 +23,9 @@
                                     <div class="flex-grow-1 ms-3">
                                         <strong>{{ $room->name }}</strong><br>
                                         <span class="text-muted ">Type: {{ $room->room_type }} | Beds:
-                                            {{ $room->no_of_beds }}</span>
+                                            {{ $room->no_of_beds }} | Room Capacity :
+                                            {{ $room->room_capacity }} </span>
+
 
                                         <div class="mt-2 d-flex align-items-center">
                                             <label class="me-2 mb-0 fw-semibold">Amount:</label>
@@ -37,14 +39,12 @@
                             @endforeach
 
                             <div class="text-end fw-bold fs-5 mt-3">
-                                Estimated Total: ₹<span id="total-amount">{{ $total }}</span>
+                                <div>Estimated Total: ₹<span id="estimated-total">{{ $total }}</span></div>
+                                <div>Room Capacity Total: <span id="room-capacity-total">{{ $room_capacity }}</span>
+                                </div>
                             </div>
-                            <div class="text-end small text-muted">
-                                Total Room Capacity: <span id="room-capacity-count">0</span><br>
-                                Total People: <span id="total-people-count">0</span><br>
-                                Extra People: <span id="extra-person-count">0</span><br>
-                                Extra Charges (₹299 per person): ₹<span id="extra-charge-amount">0</span>
-                            </div>
+
+
                         </div>
                     </div>
                 </div>
@@ -53,6 +53,18 @@
                 <div class="col-md-4">
                     <div class="card shadow-sm">
                         <div class="card-body">
+
+
+                            @if ($errors->any())
+                                <div class="alert alert-danger">
+                                    <ul>
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
+
                             <h5 class="mb-3">Customer Details</h5>
 
                             <div class="mb-3">
@@ -84,7 +96,7 @@
                             <div class="mb-3">
                                 <label>Number of Adults</label>
                                 <select name="adults" class="form-control" required>
-                                    @for ($i = 1; $i <= 50; $i++)
+                                    @for ($i = 1; $i <= $room_capacity; $i++)
                                         <option value="{{ $i }}"
                                             {{ old('adults') == $i ? 'selected' : '' }}>
                                             {{ $i }}</option>
@@ -94,13 +106,8 @@
 
                             <div class="mb-3">
                                 <label>Number of Children</label>
-                                <select name="children" class="form-control" required>
-                                    @for ($i = 0; $i <= 50; $i++)
-                                        <option value="{{ $i }}"
-                                            {{ old('children') == $i ? 'selected' : '' }}>
-                                            {{ $i }}</option>
-                                    @endfor
-                                </select>
+                                <input type="number" value="0" class="form-control" name="children"
+                                    id="children">
                             </div>
 
                             <div class="mb-3">
@@ -134,7 +141,10 @@
                                     <option value="paid">Paid</option>
                                 </select>
                             </div>
-
+                            <div class="mb-3">
+                                <label>Paid Amount</label>
+                                <input type="number" name="paid_amount" class="form-control" max="{{$total}}" required>
+                            </div>
 
                             <div class="mb-3">
                                 <label>Message</label>
