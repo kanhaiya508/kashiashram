@@ -78,7 +78,8 @@ class IndexController extends Controller
         $rooms = Room::whereIn('id', $roomIds)->get();
         $booking_from = session('booking_from');
         $booking_to = session('booking_to');
-        return view('website.confirm', compact('rooms', 'booking_from', 'booking_to'));
+           $room_capacity = $rooms->sum('room_capacity');
+        return view('website.confirm', compact('rooms', 'booking_from', 'booking_to','room_capacity'));
     }
 
     public function storeFinal(Request $request)
@@ -117,20 +118,6 @@ class IndexController extends Controller
         try {
             Log::info('Creating booking...');
 
-            $totalPeople = intval($request->adults) + intval($request->children);
-
-            // Get room capacities
-            $rooms = Room::whereIn('id', $roomIds)->get();
-            $totalRoomCapacity = $rooms->sum('room_capacity');
-
-            // Calculate extra people
-            $extraPersons = max(0, $totalPeople - $totalRoomCapacity);
-            $extraCharge = $extraPersons * 299;
-
-            // Total room amount
-            $roomTotal = collect($request->amounts)->sum();
-            $finalTotal = $roomTotal + $extraCharge;
-
 
             $booking = Booking::create([
                 'name' => $request->name,
@@ -138,17 +125,14 @@ class IndexController extends Controller
                 'email' => $request->email,
                 'aadhar' => $request->aadhar,
                 'message' => $request->message,
-
                 'adults' => $request->adults,
                 'children' => $request->children,
-
                 'gothra' => $request->gothra,
                 'user_type' => $request->user_type,
                 'travel_type' => $request->travel_type,
                 'booking_from' => $bookingFrom,
                 'booking_to' => $bookingTo,
-                'extra_charge' => $extraCharge,
-
+                'paid_amount' => '0',
                 'status' => 'applied',
             ]);
 

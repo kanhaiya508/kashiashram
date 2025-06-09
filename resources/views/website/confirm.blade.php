@@ -73,17 +73,13 @@
                                     </div>
                                 @endforeach
 
-                                <div class="text-end fw-bold fs-5 mt-4 text-dark">
-                                    Estimated Total: <span id="total-amount"
-                                        class="text-primary">₹{{ number_format($total) }}</span>
+                                <div class="text-end fw-bold fs-5 mt-3">
+                                    <div>Estimated Total: ₹<span id="estimated-total">{{ $total }}</span></div>
+                                    <div>Room Capacity Total: <span id="room-capacity-total">{{ $room_capacity }}</span>
+                                    </div>
+                                </div>
 
-                                </div>
-                                <div class="text-end small text-muted">
-                                    Total Room Capacity: <span id="room-capacity-count">0</span><br>
-                                    Total People: <span id="total-people-count">0</span><br>
-                                    Extra People: <span id="extra-person-count">0</span><br>
-                                    Extra Charges (₹299 per person): ₹<span id="extra-charge-amount">0</span>
-                                </div>
+
                             </div>
                         </div>
 
@@ -118,7 +114,7 @@
                                     <div class="col-md-6">
                                         <label for="adults" class="form-label">Number of Adults</label>
                                         <select id="adults" name="adults" class="form-select" required>
-                                            @for ($i = 1; $i <= 20; $i++)
+                                            @for ($i = 1; $i <= $room_capacity; $i++)
                                                 <option value="{{ $i }}"
                                                     {{ old('adults') == $i ? 'selected' : '' }}>{{ $i }}
                                                 </option>
@@ -142,8 +138,7 @@
                                     </div>
                                     <div class="col-md-6">
                                         <label for="phone" class="form-label">Phone Number</label>
-                                        <input type="text" id="phone" name="phone" class="form-control"
-                                            required>
+                                        <input type="text" id="phone" name="phone" class="form-control" required>
                                     </div>
                                     <div class="col-md-3">
                                         <label for="user_type" class="form-label">User Type</label>
