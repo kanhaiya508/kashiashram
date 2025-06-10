@@ -34,7 +34,7 @@ Route::post('web/donation/store', [IndexController::class, 'storeDonor'])->name(
 Route::post('room-bookings/remove-from-session', [RoomBookingController::class, 'removeFromSession'])->name('room-bookings.remove-from-session');
 Route::post('room-bookings/add-to-session', [RoomBookingController::class, 'addToSession'])->name('room-bookings.add-to-session');
 
-
+Route::get('invoice/{booking}', [RoomBookingController::class, 'generateInvoice'])->name('invoice');
 
 
 Route::middleware('auth')->group(function () {
@@ -64,7 +64,7 @@ Route::middleware('auth')->group(function () {
         Route::get('confirm', [RoomBookingController::class, 'confirm'])->name('confirm');
         Route::post('confirm', [RoomBookingController::class, 'storeFinal'])->name('confirm.store');
 
-        Route::get('invoice/{booking}', [RoomBookingController::class, 'generateInvoice'])->name('invoice');
+
         Route::get('available-rooms', [RoomBookingController::class, 'availableRooms'])->name('available');
 
 
