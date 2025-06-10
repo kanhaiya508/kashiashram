@@ -147,38 +147,17 @@
 
                                         <p class="mb-1">
                                             <strong>Phone:</strong> {{ $booking->phone }}
-
                                             @php
-                                                $whatsappNumber = preg_replace('/\D/', '', $booking->phone);
-                                                $invoiceUrl = route('room-bookings.invoice', $booking->id);
-                                                $message = <<<EOD
-                                                SKG ASHRAM - INVOICE
-                                                WELCOME TO MOKSHAPURI KASHI
-                                                BOOKING CONFIRMATION COPY
-                                                Shree Gayatri Charitable Trust
-                                                B7/131, Bagh Hada, (near Sai Baba Mandir Sonarpura Varanasi)
-                                                Kedar Ghat 221001
-
-                                                Note: In case of any cancellation, the paid amount will not be refundable or transferable and will be utilized for Narayana Seva.
-
-                                                Note: Don’t forget to register your name in the reception register for Anna Prasadam before morning 8 AM and evening 5 PM.
-
-                                                We request you to participate in *Annaprasad Donation Yadhasakthi*.
-
-                                                Thank You!!! Visit Again
-                                                *Hari Om*
-
-                                                Invoice: $invoiceUrl
-                                                EOD;
-                                                $encodedMessage = urlencode($message);
-                                                $whatsappLink = "https://wa.me/{$whatsappNumber}?text={$encodedMessage}";
+                                                $phone = preg_replace('/\D/', '', $booking->phone); // Phone number without symbols
+                                                $invoiceLink = route('room-bookings.invoice', $booking->id); // Invoice URL
+                                                $message = "Namaste 🙏,\n\nHere is your booking invoice from SKG Ashram:\n$invoiceLink\n\nThank you! Hari Om 🙏";
+                                                $whatsappUrl = "https://wa.me/{$phone}?text=" . urlencode($message);
                                             @endphp
 
-                                            <a href="{{ $whatsappLink }}" target="_blank"
+                                            <a href="{{ $whatsappUrl }}" target="_blank"
                                                 class="btn btn-success btn-sm ms-2" title="Send Invoice via WhatsApp">
                                                 <i class="fab fa-whatsapp"></i> WhatsApp
                                             </a>
-
                                         </p>
                                     </div>
 
