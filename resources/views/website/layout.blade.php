@@ -5,7 +5,7 @@
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Maharatri - Temple HTML Template</title>
+    <title>Abburu Hari Hara in Kasi</title>
 
     <!-- Favicon -->
     <link rel="icon" type="{{ asset('website/image/png') }}" sizes="32x32" href="favicon.ico">
