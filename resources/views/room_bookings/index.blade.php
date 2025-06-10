@@ -160,7 +160,8 @@
                                         <p class="mb-1">
                                             <strong>Booking Dates:</strong><br>
                                             {{ \Carbon\Carbon::parse($booking->booking_from)->format('d-m-Y') }}
-                                            → {{ \Carbon\Carbon::parse($booking->booking_to)->format('d-m-Y') }}
+                                            → {{ \Carbon\Carbon::parse($booking->booking_to)->format('d-m-Y') }} , Day
+                                            {{ $booking->getDurationInDays() }}
                                         </p>
 
                                         <p class="mb-1"><strong>Rooms:</strong></p>
@@ -201,8 +202,8 @@
 
                                     <div class="mt-auto">
                                         <div class="dropdown">
-                                            <button class="btn btn-secondary w-100 btn-sm dropdown-toggle" type="button"
-                                                data-bs-toggle="dropdown" aria-expanded="false">
+                                            <button class="btn btn-secondary w-100 btn-sm dropdown-toggle"
+                                                type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                                 Actions
                                             </button>
                                             <ul class="dropdown-menu">
