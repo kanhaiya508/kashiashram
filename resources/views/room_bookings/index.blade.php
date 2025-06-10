@@ -148,11 +148,37 @@
                                         <p class="mb-1">
                                             <strong>Phone:</strong> {{ $booking->phone }}
 
-                                            <a href="https://wa.me/{{ preg_replace('/\D/', '', $booking->phone) }}"
-                                                target="_blank" class="btn btn-success btn-sm ms-2"
-                                                title="Open WhatsApp Chat">
+                                            @php
+                                                $whatsappNumber = preg_replace('/\D/', '', $booking->phone);
+                                                $invoiceUrl = route('room-bookings.invoice', $booking->id);
+                                                $message = <<<EOD
+                                                SKG ASHRAM - INVOICE
+                                                WELCOME TO MOKSHAPURI KASHI
+                                                BOOKING CONFIRMATION COPY
+                                                Shree Gayatri Charitable Trust
+                                                B7/131, Bagh Hada, (near Sai Baba Mandir Sonarpura Varanasi)
+                                                Kedar Ghat 221001
+
+                                                Note: In case of any cancellation, the paid amount will not be refundable or transferable and will be utilized for Narayana Seva.
+
+                                                Note: Don’t forget to register your name in the reception register for Anna Prasadam before morning 8 AM and evening 5 PM.
+
+                                                We request you to participate in *Annaprasad Donation Yadhasakthi*.
+
+                                                Thank You!!! Visit Again
+                                                *Hari Om*
+
+                                                Invoice: $invoiceUrl
+                                                EOD;
+                                                $encodedMessage = urlencode($message);
+                                                $whatsappLink = "https://wa.me/{$whatsappNumber}?text={$encodedMessage}";
+                                            @endphp
+
+                                            <a href="{{ $whatsappLink }}" target="_blank"
+                                                class="btn btn-success btn-sm ms-2" title="Send Invoice via WhatsApp">
                                                 <i class="fab fa-whatsapp"></i> WhatsApp
                                             </a>
+
                                         </p>
                                     </div>
 
