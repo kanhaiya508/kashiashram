@@ -153,14 +153,14 @@
     </table>
 
     <h4 class="mt-3">Rooms Booked:</h4>
-    <table>
-        <thead>
+    <table class="table table-bordered">
+        <thead class="table-dark">
             <tr>
                 <th>#</th>
                 <th>Room</th>
                 <th>Type</th>
                 <th>Beds</th>
-                <th>Day</th>
+                <th>Days</th>
                 <th>Amount</th>
             </tr>
         </thead>
@@ -168,15 +168,16 @@
             @foreach ($booking->rooms as $index => $r)
                 <tr>
                     <td>{{ $index + 1 }}</td>
-                    <td>{{ $r->room->name ?? '-' }}</td>
-                    <td>{{ $r->room->room_type }}</td>
-                    <td>{{ $r->room->no_of_beds }}</td>
-                    <td>{{  $booking->getDurationInDays()  }}</td>
-                    <td>₹{{ number_format($r->amount, 2) * $booking->getDurationInDays() }}</td>
+                    <td>{{ optional($r->room)->name ?? '-' }}</td>
+                    <td>{{ optional($r->room)->room_type ?? '-' }}</td>
+                    <td>{{ optional($r->room)->no_of_beds ?? '-' }}</td>
+                    <td>{{ $booking->getDurationInDays() }}</td>
+                    <td>₹{{ number_format($r->amount * $booking->getDurationInDays(), 2) }}</td>
                 </tr>
             @endforeach
         </tbody>
     </table>
+
 
     <p class="note"><strong>Note:</strong> In case of any cancellation, the paid amount will not be refundable or
         transferable and will be utilized for Narayana Seva.</p>
