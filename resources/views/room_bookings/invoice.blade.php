@@ -88,8 +88,8 @@
             <td>{{ $booking->booking_to->format('d-m-Y') }}</td>
         </tr>
         @php
-            $roomTotal = $booking->rooms->sum('amount')  ;
-            $day =  $booking->getDurationInDays()  ?? 0;
+            $roomTotal = $booking->rooms->sum('amount');
+            $day = $booking->getDurationInDays() ?? 0;
             $finalTotal = $roomTotal * $day;
             $isPaid = $booking->payment_status === 'paid';
             $paidAmount = $booking->paid_amount ?? 0; // agar paid amount stored hai to use karo
@@ -99,7 +99,10 @@
             <th>Room Total</th>
             <td>₹{{ number_format($roomTotal, 2) }}</td>
         </tr>
-
+        <tr>
+            <th>No. of Days</th>
+            <td>{{ $booking->getDurationInDays() }}</td>
+        </tr>
         <tr class="table-primary fw-bold">
             <th>Final Total Amount</th>
             <td>₹{{ number_format($finalTotal, 2) }}</td>
@@ -110,7 +113,7 @@
         </tr>
         <tr>
             <th>Remaining Balance</th>
-            <td>₹{{ number_format( $finalTotal - $paidAmount , 2) }}</td>
+            <td>₹{{ number_format($finalTotal - $paidAmount, 2) }}</td>
         </tr>
 
 
@@ -122,10 +125,7 @@
             <th>Travel Type</th>
             <td>{{ $booking->travel_type }}</td>
         </tr>
-        <tr>
-            <th>No. of Days</th>
-            <td>{{ $booking->getDurationInDays() }}</td>
-        </tr>
+
         <tr>
             <th>User Type</th>
             <td>{{ $booking->user_type }}</td>
@@ -160,6 +160,7 @@
                 <th>Room</th>
                 <th>Type</th>
                 <th>Beds</th>
+                <th>Day</th>
                 <th>Amount</th>
             </tr>
         </thead>
@@ -170,7 +171,8 @@
                     <td>{{ $r->room->name ?? '-' }}</td>
                     <td>{{ $r->room->room_type }}</td>
                     <td>{{ $r->room->no_of_beds }}</td>
-                    <td>₹{{ number_format($r->amount, 2) }}</td>
+                    <td>{{  $booking->getDurationInDays()  }}</td>
+                    <td>₹{{ number_format($r->amount, 2) * $booking->getDurationInDays() }}</td>
                 </tr>
             @endforeach
         </tbody>
