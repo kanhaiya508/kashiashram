@@ -149,7 +149,7 @@
                                             <strong>Phone:</strong> {{ $booking->phone }}
                                             @php
                                                 $phone = preg_replace('/\D/', '', $booking->phone); // Phone number without symbols
-                                                $invoiceLink = route('room-bookings.invoice', $booking->id); // Invoice URL
+                                                $invoiceLink = route('invoice', $booking->id); // Invoice URL
                                                 $message = "Namaste 🙏,\n\nHere is your booking invoice from SKG Ashram:\n$invoiceLink\n\nThank you! Hari Om 🙏";
                                                 $whatsappUrl = "https://wa.me/{$phone}?text=" . urlencode($message);
                                             @endphp
