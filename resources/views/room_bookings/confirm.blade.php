@@ -138,12 +138,15 @@
                                 <label>Payment Status</label>
                                 <select name="payment_status" class="form-control" required>
                                     <option value="unpaid" selected>Unpaid</option>
-                                    <option value="paid">Paid</option>
+                                    <option value="advance_paid">Advance Paid</option>
+                                    <option value="fully_paid">Fully Paid</option>
                                 </select>
                             </div>
+
                             <div class="mb-3">
                                 <label>Paid Amount</label>
-                                <input type="number" name="paid_amount" class="form-control" max="{{$total}}" required>
+                                <input type="number" name="paid_amount" class="form-control" max="{{ $total }}"
+                                    required>
                             </div>
 
                             <div class="mb-3">
