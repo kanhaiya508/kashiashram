@@ -88,9 +88,9 @@
             <td>{{ $booking->booking_to->format('d-m-Y') }}</td>
         </tr>
         @php
-            $roomTotal = $booking->rooms->sum('amount');
-            $extraCharge = $booking->extra_charge ?? 0;
-            $finalTotal = $roomTotal + $extraCharge;
+            $roomTotal = $booking->rooms->sum('amount')  ;
+            $day =  $booking->getDurationInDays()  ?? 0;
+            $finalTotal = $roomTotal * $day;
             $isPaid = $booking->payment_status === 'paid';
             $paidAmount = $booking->paid_amount ?? 0; // agar paid amount stored hai to use karo
         @endphp
@@ -124,7 +124,7 @@
         </tr>
         <tr>
             <th>No. of Days</th>
-            <td>{{ $booking->booking_from->diffInDays($booking->booking_to) }}</td>
+            <td>{{ $booking->getDurationInDays() }}</td>
         </tr>
         <tr>
             <th>User Type</th>
