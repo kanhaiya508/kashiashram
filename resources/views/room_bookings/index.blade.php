@@ -255,7 +255,7 @@
                                                     </button></li>
 
                                                 <li><a class="dropdown-item"
-                                                        href="{{ route('room-bookings.invoice', $booking->id) }}">
+                                                        href="{{ route('invoice', $booking->id) }}">
                                                         <i class="fas fa-file-pdf me-1 text-secondary"></i> Invoice
                                                     </a></li>
                                             </ul>
