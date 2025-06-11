@@ -195,13 +195,15 @@
 
                                         <p class="mb-2"><strong>Status:</strong> <span
                                                 class="badge {{ $badgeClass }}">{{ ucfirst($status) }}</span></p>
+
                                         @if ($booking->payment_status === 'advance_paid')
-                                            Payment Status: Advance Paid
+                                            <span class="text-warning fw-bold">Payment Status: Advance Paid</span>
                                         @elseif ($booking->payment_status === 'fully_paid')
-                                            Payment Status: Fully Paid
+                                            <span class="text-success fw-bold">Payment Status: Fully Paid</span>
                                         @else
-                                            Payment Status: Unpaid
+                                            <span class="text-danger fw-bold">Payment Status: Unpaid</span>
                                         @endif
+
 
                                     </div>
 
