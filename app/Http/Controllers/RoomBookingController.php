@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Exports\BookingsExport;
+use Carbon\Carbon;
 use Maatwebsite\Excel\Facades\Excel;
 
 class RoomBookingController extends Controller
@@ -104,10 +105,10 @@ class RoomBookingController extends Controller
 
     public function availableRooms(Request $request)
     {
-        $bookingFrom = $request->booking_from ?? now()->toDateString();
-        $bookingTo = $request->booking_to ?? now()->addDay()->toDateString();
+        // Parse datetime with fallback
+        $bookingFrom = $request->booking_from ? Carbon::parse($request->booking_from) : now();
+        $bookingTo = $request->booking_to ? Carbon::parse($request->booking_to) : now()->addDay();
 
-        // Merge for validation
         $request->merge([
             'booking_from' => $bookingFrom,
             'booking_to' => $bookingTo,
@@ -118,11 +119,13 @@ class RoomBookingController extends Controller
             'booking_to' => 'required|date|after_or_equal:booking_from',
         ]);
 
-        // Step 1: Get all bookings in the date range that are still active
+        // Step 1: Find active bookings that overlap with datetime
         $activeBookingIds = Booking::where('status', 'booked')
             ->where(function ($q) use ($bookingFrom, $bookingTo) {
-                $q->whereBetween('booking_from', [$bookingFrom, $bookingTo])
-                    ->orWhereBetween('booking_to', [$bookingFrom, $bookingTo])
+                $q->where(function ($q1) use ($bookingFrom, $bookingTo) {
+                    $q1->whereBetween('booking_from', [$bookingFrom, $bookingTo])
+                        ->orWhereBetween('booking_to', [$bookingFrom, $bookingTo]);
+                })
                     ->orWhere(function ($q2) use ($bookingFrom, $bookingTo) {
                         $q2->where('booking_from', '<=', $bookingFrom)
                             ->where('booking_to', '>=', $bookingTo);
@@ -130,24 +133,24 @@ class RoomBookingController extends Controller
             })
             ->pluck('id');
 
-        // Step 2: Get all room_ids booked within those bookings
+        // Step 2: Find booked room IDs
         $bookedRoomIds = RoomBooking::whereIn('booking_id', $activeBookingIds)
             ->pluck('room_id')
             ->toArray();
 
-        // Step 3: Filter out booked rooms
+        // Step 3: Get available rooms
         $rooms = Room::where('active', 1)
             ->whereNotIn('id', $bookedRoomIds)
             ->get();
 
+        // Step 4: Store datetime in session
         session([
-            'booking_from' => $bookingFrom,
-            'booking_to' => $bookingTo,
+            'booking_from' => $bookingFrom->format('Y-m-d\TH:i'),
+            'booking_to' => $bookingTo->format('Y-m-d\TH:i'),
         ]);
 
         return view('room_bookings.select-room', compact('rooms'));
     }
-
 
 
     public function selectRoom()

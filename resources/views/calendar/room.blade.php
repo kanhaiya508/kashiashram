@@ -134,7 +134,7 @@
                                         <div class="modal-body">
                                             <h6 class="mb-3 text-danger fw-bold">
                                                 Booking ID:
-                                                <a href="{{ route('room-bookings.invoice', $info['booking_id']) }}"
+                                                <a href="{{ route('invoice', $info['booking_id']) }}"
                                                     class="text-danger text-decoration-underline">
                                                     {{ $info['booking_id'] }}
                                                 </a>
@@ -167,7 +167,7 @@
                                             </div>
 
                                             <div class="text-end mt-4">
-                                                <a href="{{ route('room-bookings.invoice', $info['booking_id']) }}"
+                                                <a href="{{ route('invoice', $info['booking_id']) }}"
                                                     class="btn btn-outline-primary btn-sm" target="_blank" download>
                                                     <i class="bi bi-download"></i> Download Invoice
                                                 </a>

@@ -7,15 +7,17 @@
             <div class="row align-items-end gy-3">
                 <div class="col-12 col-md-4">
                     <label class="form-label">Booking From</label>
-                    <input type="date" name="booking_from" class="form-control"
-                        value="{{ request('booking_from', session('booking_from')) }}" min="{{ now()->toDateString() }}"
-                        onchange="document.getElementById('dateForm').submit();" required>
+                    <input type="datetime-local" name="booking_from" class="form-control"
+                        value="{{ request('booking_from', session('booking_from', now()->format('Y-m-d\TH:i'))) }}"
+                        min="{{ now()->format('Y-m-d\TH:i') }}" onchange="document.getElementById('dateForm').submit();"
+                        required>
+
                 </div>
                 <div class="col-12 col-md-4">
                     <label class="form-label">Booking To</label>
-                    <input type="date" name="booking_to" class="form-control"
-                        value="{{ request('booking_to', session('booking_to')) }}"
-                        min="{{ request('booking_from', session('booking_from', now()->toDateString())) }}"
+                    <input type="datetime-local" name="booking_to" class="form-control"
+                        value="{{ request('booking_to', session('booking_to', now()->addDay()->format('Y-m-d\TH:i'))) }}"
+                        min="{{ request('booking_from', session('booking_from', now()->format('Y-m-d\TH:i'))) }}"
                         onchange="document.getElementById('dateForm').submit();" required>
                 </div>
                 <div class="col-12 col-md-4">
@@ -36,19 +38,19 @@
                                 style="position: relative; overflow: hidden;">
                                 <div class="bg-image"
                                     style="
-        background-image: url('{{ asset($room->image) }}');
-        background-size: cover;
-        background-position: center;
-        height: 220px;
-        position: relative;">
+                                    background-image: url('{{ asset($room->image) }}');
+                                    background-size: cover;
+                                    background-position: center;
+                                    height: 220px;
+                                    position: relative;">
 
                                     <div
                                         style="
-            background: rgba(0, 0, 0, 0.5);
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            padding: 10px;">
+                                        background: rgba(0, 0, 0, 0.5);
+                                        position: absolute;
+                                        bottom: 0;
+                                        width: 100%;
+                                        padding: 10px;">
                                         <h5 class="card-title mb-1 text-white">{{ $room->name }}</h5>
                                         <p class="mb-0"><strong>Type:</strong> {{ $room->room_type }}</p>
                                         <p class="mb-0"><strong>Beds:</strong> {{ $room->no_of_beds }}</p>
@@ -81,75 +83,6 @@
                 </div>
             </div>
 
-
-            {{-- Booking Summary --}}
-            {{-- <div class="col-md-4 order-1 order-md-2 mt-4 mt-md-0">
-
-                <div class=" d-none d-md-block">
-                    <div class="card shadow-sm">
-                        <div class="card-body">
-                            <h5 class="mb-3">Booking Summary</h5>
-                            @php
-                                $selectedIds = session('selected_rooms', []);
-                                $selectedRooms = \App\Models\Room::whereIn('id', $selectedIds)->get();
-                                $totalAmount = $selectedRooms->sum('donation');
-                            @endphp
-
-                            @forelse ($selectedRooms as $r)
-                                <div class="d-flex justify-content-between">
-                                    <span>{{ $r->name }}</span>
-                                    <span>₹{{ $r->donation }}</span>
-                                </div>
-                            @empty
-                                <p class="text-muted">No rooms selected</p>
-                            @endforelse
-
-                            @if ($selectedRooms->count())
-                                <hr>
-                                <div class="d-flex justify-content-between fw-bold">
-                                    <span>Total</span>
-                                    <span>₹{{ $totalAmount }}</span>
-                                </div>
-
-                                <div class="mt-3 text-end">
-                                    <a href="{{ route('room-bookings.create') }}" class="btn btn-success w-100">
-                                        Continue to Booking
-                                    </a>
-                                </div>
-                            @endif
-                        </div>
-                    </div>
-                </div>
-
-                <div class="d-block d-md-none mt-4">
-                    <div class="card shadow-sm">
-                        <div class="card-body">
-                            <h5 class="mb-3">Booking Summary</h5>
-
-                            @foreach ($selectedRooms as $r)
-                                <div class="d-flex justify-content-between">
-                                    <span>{{ $r->name }}</span>
-                                    <span>₹{{ $r->donation }}</span>
-                                </div>
-                            @endforeach
-
-                            @if ($selectedRooms->count())
-                                <hr>
-                                <div class="d-flex justify-content-between fw-bold">
-                                    <span>Total</span>
-                                    <span>₹{{ $totalAmount }}</span>
-                                </div>
-
-                                <div class="mt-3 text-end">
-                                    <a href="{{ route('room-bookings.create') }}" class="btn btn-success w-100">
-                                        Continue to Booking
-                                    </a>
-                                </div>
-                            @endif
-                        </div>
-                    </div>
-                </div>
-            </div> --}}
 
         </div>
     </div>
