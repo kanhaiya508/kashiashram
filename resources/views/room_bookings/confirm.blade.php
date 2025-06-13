@@ -14,7 +14,7 @@
                         </div>
                         <div class="card-body bg-white">
                             {{-- Booking Date Info --}}
-                            <div class="row mb-4">
+                            <div class="row g-2 mb-4">
                                 @php
                                     $checkin = \Carbon\Carbon::parse(session('booking_from'));
                                     $checkout = \Carbon\Carbon::parse(session('booking_to'));
@@ -35,7 +35,7 @@
                                         <small>Time: {{ $checkout->format('h:i A') }}</small>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-4  ">
                                     @php
                                         $from = \Carbon\Carbon::parse(session('booking_from'));
                                         $to = \Carbon\Carbon::parse(session('booking_to'));
